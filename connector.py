@@ -63,7 +63,7 @@ if __name__ == "__main__":
             result = ldapServer.getAllUsers()
         else:
             result = ldapServer.getUsersByUID(users)
-
+        print result
         ldapServer.unbindServer()
         for ldapUser in result:
             print ldapUser
