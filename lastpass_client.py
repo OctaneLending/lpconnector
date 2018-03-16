@@ -7,7 +7,6 @@ class LastPassClient(object):
     def __init__(self, cid = None, user = None, key = None):
         self.cid = cid if cid else os.getenv('LASTPASS_API_CID')
         self.user = user if user else os.getenv('LASTPASS_API_USER')
-        self.key = ley if key else os.getenv('LASTPASS_API_SECRET')
         self.basePayload = "{\"cid\":%s,\"provhash\":\"%s\",\"apiuser\":\"%s\",\"cmd\":\"" % (self.cid, self.key, self.user)
 
     def batchAdd(self, users, defaultPwd = None, pwdReset = True):
