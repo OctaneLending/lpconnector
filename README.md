@@ -1,7 +1,7 @@
 # lastpass-ldap-sync
 Python client for syncing LastPass Enterprise with our directory over LDAP
 
-Before using this client you need to create a .env file that contains the neccesarry credentials for your LDAP server and you LastPass Enterprise account. Refer ldap_server.py and lastpass_client.py for the environment variable names expected
+Before using this client you need to create a .env file that contains the neccesarry credentials for your LDAP server and you LastPass Enterprise account. Refer to [ldap_server.py](https://github.com/OctaneLending/lastpass-ldap-sync/blob/master/ldap_server.py) and [lastpass_client.py](https://github.com/OctaneLending/lastpass-ldap-sync/blob/master/lastpass_client.py) for the environment variable names expected
 
 Don't forget to setup a virtual environment and run `pip install -r requirements` before using the client
 ```
