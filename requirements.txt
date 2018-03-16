@@ -1,3 +1,4 @@
 python-ldap==3.0.0
 python-dotenv==0.8.2
 requests==2.18.4
+docopt==0.6.2

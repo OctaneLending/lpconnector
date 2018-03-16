@@ -28,9 +28,9 @@ class LastPassClient(object):
 
         payload += "]}"
         print payload
-
         try:
             json.loads(payload)
         except ValueError, error:
             print "ERROR: " + error
+        # TODO send the request
 
