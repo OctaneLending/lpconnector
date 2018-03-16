@@ -36,8 +36,13 @@ class LDAPServer(object):
 
         return self.doSearch(searchFilter, searchAttributes, 'group')
 
+    def getUserByUID(self, uid):
+        searchFilter = "(uid=" + uid + ")"
+        searchAttributes = LDAPUser.attributes
+
+        return self.doSearch(searchFilter, searchAttributes, 'user')
+
     def doSearch(self, sFilter, sAttributes, returnType):
-        print sFilter + ' : ' + ', '.join(sAttributes)
         sScope = ldap.SCOPE_SUBTREE
         result_set = []
 
@@ -50,7 +55,6 @@ class LDAPServer(object):
                         break
                     else:
                         if result_type == ldap.RES_SEARCH_ENTRY:
-                            print result_data[0][1]
                             if returnType == 'user':
                                 result_set.append(LDAPUser(**result_data[0][1]))
                             elif returnType == 'group':
