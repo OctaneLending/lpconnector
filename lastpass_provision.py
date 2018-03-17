@@ -13,10 +13,23 @@ class LastPassProvisioner(object):
     def run(self):
         self.server.bindToServer()
         newUsers = []
+        userCount = 0
         if self.users is None:
+            print "Provisioning ALL users..."
             newUsers = self.server.getAllUsers()
         else:
+            userCount = len(self.users)
+            print "Provisioning " + str(userCount) + " users..."
             newUsers = self.server.getUsersByUID(self.users)
         self.server.unbindServer()
-        self.client.batchAdd(newUsers, self.password, self.resetPwd)
+        response = self.client.batchAdd(newUsers, self.password, self.resetPwd)
+        if response.status_code == 200:
+            if userCount == 0:
+                print "ALL users successfully provisioned."
+            elif userCount == 1:
+                print "1 user successfully provisioned."
+            else:
+                print str(userCount) + " users successfully provisioned."
+        else:
+            response.raise_for_status()
 

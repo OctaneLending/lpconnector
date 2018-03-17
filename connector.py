@@ -38,10 +38,6 @@ if __name__ == "__main__":
         users = None
         if args.get('--users') is not None:
             users = args.get('--users').split(',')
-        if users:
-            print "Provisioning " + str(len(users)) + " users..."
-        else:
-            print "Provisioning all users..."
         password = args.get('--password')
         resetPwd = strtobool(args.get('--reset-password'))
         provisioner = LastPassProvisioner(users, password, resetPwd)
@@ -63,7 +59,6 @@ if __name__ == "__main__":
             result = ldapServer.getAllUsers()
         else:
             result = ldapServer.getUsersByUID(users)
-        print result
         ldapServer.unbindServer()
         for ldapUser in result:
             print ldapUser
@@ -78,10 +73,10 @@ if __name__ == "__main__":
             print "Retrieving all users from LastPass..."
         disabled = None
         if args.get('--disabled') is not None:
-            disabled = 1 if args.get('--disabled') == True else 0
+            disabled = 1 if strtobool(args.get('--disabled')) == True else 0
         admin = None
         if args.get('--admin') is not None:
-            admin = 1 if args.get('--admin') == True else 0
+            admin = 1 if strtobool(args.get('--admin')) == True else 0
 
         lpClient = LastPassClient()
         lpClient.getUserData(user, disabled, admin)

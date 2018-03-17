@@ -1,5 +1,7 @@
 import re
 
+from lastpass_user import LastPassUser
+
 class LDAPUser(object):
 
     objectClass = "inetOrgPerson"
@@ -15,3 +17,11 @@ class LDAPUser(object):
             if cn:
                 groupList.append(cn.group(1))
         self.groups = groupList
+
+    def getLastPassUser(self):
+        return LastPassUser(
+            username=self.email,
+            fullname=self.name,
+            groups=self.groups,
+            attribs={'uid': self.uid}
+        )

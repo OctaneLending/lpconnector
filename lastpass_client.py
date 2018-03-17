@@ -21,19 +21,15 @@ class LastPassClient(object):
         payload['cmd'] = cmd
         payload['data'] = []
         for user in users:
-            userPayload = user.__dict__
+            userPayload = user.getLastPassUser().__dict__
             if defaultPwd is not None:
                 userPayload['password'] = defaultPwd
                 if pwdReset is not None:
                     userPayload['password_reset_required'] = pwdReset
             payload['data'].append(userPayload)
-        try:
-            jsonPayload = json.dumps(payload)
-            json.loads(jsonPayload)
-            print jsonPayload
-        except ValueError, error:
-            print "ERROR: " + error
-        # TODO send the request
+
+        response = requests.post(self.url, json=payload)
+        return response
 
     def getUserData(self, user = None, disabled = None, admin = None):
         cmd = "getuserdata"
@@ -48,12 +44,6 @@ class LastPassClient(object):
             if admin is not None:
                 dataPayload['admin'] = str(admin)
             payload['data'] = dataPayload
-        try:
-            jsonPayload = json.dumps(payload)
-            json.loads(jsonPayload)
-            print jsonPayload
-        except ValueError, error:
-            print "ERROR: " + error
 
-        response = requests.post(self.url, json=jsonPayload)
-        print response
+        response = requests.post(self.url, json=payload)
+        print response.json()

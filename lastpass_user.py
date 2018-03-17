@@ -1,4 +1,4 @@
-class LastPassUser(object)
+class LastPassUser(object):
 
     def __init__(self, **kwargs):
         self.username = kwargs.get('username')
