@@ -7,7 +7,7 @@ Purpose
 -------
 
 This client connects to a remote user directory and queries users and groups over LDAP to sync an organization's users and groups in LastPass Enterprise.  The included LastPass API client contains full coverage of the LastPass Enterprise API as documented `here
-<https://lastpass.com/enterprise_apidoc.php>`. This client is designed to be run manually to provision new users and force updates to existing users and to be run in an automated fashion to keep LastPass Enterprise users up-to-date.
+<https://lastpass.com/enterprise_apidoc.php>`_. This client is designed to be run manually to provision new users and force updates to existing users and to be run in an automated fashion to keep LastPass Enterprise users up-to-date.
 
 Setup
 -----
