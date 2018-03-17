@@ -11,6 +11,7 @@ setup(
     author="Joshua Marcus-Hixson",
     author_email="josh@octanelending.com",
     description= "Connect remote LDAP to LastPass Enterprise API",
+    platform="any",
     install_requires=[
         'python-ldap==3.0.0',
         'python-dotenv==0.8.2',

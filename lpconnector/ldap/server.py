@@ -1,6 +1,5 @@
 import ldap,os
-from lpconnector.ldap.user import LDAPUser
-from lpconnector.ldap.group import LDAPGroup
+from lpconnector.ldap import LDAPUser, LDAPGroup
 
 class LDAPServer(object):
 

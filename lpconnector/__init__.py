@@ -1,1 +1,1 @@
-from . import lpconnector
+from lpconnector import *
