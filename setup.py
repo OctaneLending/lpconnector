@@ -1,5 +1,5 @@
 import os
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -7,7 +7,7 @@ def read(fname):
 setup(
     name="lpconnector",
     version="0.1.0",
-    url="https://github.com/OctaneLending/lastpass-ldap-syc",
+    url="https://www.github.com/OctaneLending/lastpass-ldap-syc",
     author="Joshua Marcus-Hixson",
     author_email="josh@octanelending.com",
     description= "Connect remote LDAP to LastPass Enterprise API",

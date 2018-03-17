@@ -20,10 +20,10 @@ Options:
 from docopt import docopt
 from dotenv import load_dotenv
 from distutils.util import strtobool
-from ldap_server import LDAPServer
-from lastpass_client import LastPassClient
-from lastpass_sync import LastPassSyncer
-from lastpass_provision import LastPassProvisioner
+from lpconnector.ldap.server import LDAPServer
+from lpconnector.lastpass.client import LastPassClient
+from lpconnector.lastpass.sync import LastPassSyncer
+from lpconnector.lastpass.provision import LastPassProvisioner
 
 if __name__ == "__main__":
     load_dotenv()
