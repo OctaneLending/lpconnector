@@ -1,6 +1,6 @@
 import re
 
-from lpconnector.lastpass import LastPassUser
+from ..lastpass.user import LastPassUser
 
 class LDAPUser(object):
 

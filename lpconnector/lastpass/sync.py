@@ -1,5 +1,3 @@
-from lpconnector.ldap import LDAPServer
-from lpconnector.lastpass import LastPassClient
 
 class LastPassSyncer(object):
 

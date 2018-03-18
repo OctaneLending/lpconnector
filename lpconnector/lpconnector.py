@@ -16,15 +16,14 @@ Options:
     --disabled=BOOL         Get only disabled users
     --admin=BOOL            Get only admin users
 """
-
 from docopt import docopt
-from dotenv import load_dotenv
 from distutils.util import strtobool
-from .ldap import LDAPServer
-from .lastpass import LastPassClient, LastPassSyncer, LastPassProvisioner
+from .ldap.server import LDAPServer
+from .lastpass.client import LastPassClient
+from .lastpass.sync import LastPassSyncer
+from .lastpass.provision import LastPassProvisioner
 
-if __name__ == "__main__":
-    load_dotenv()
+def main():
     args = docopt(__doc__)
 
     if args.get('sync'):
@@ -78,3 +77,7 @@ if __name__ == "__main__":
 
         lpClient = LastPassClient()
         lpClient.getUserData(user, disabled, admin)
+
+if __name__ == "__main__":
+    main()
+

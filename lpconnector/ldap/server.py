@@ -1,5 +1,6 @@
 import ldap,os
-from lpconnector.ldap import LDAPUser, LDAPGroup
+from .user import LDAPUser
+from .group import LDAPGroup
 
 class LDAPServer(object):
 
@@ -11,6 +12,7 @@ class LDAPServer(object):
         self.ldapServer = None
 
     def bindToServer(self):
+        print self.server
         self.ldapServer = ldap.initialize(self.server)
 
         bindDN = "uid=" + self.user + "," + self.baseDN
