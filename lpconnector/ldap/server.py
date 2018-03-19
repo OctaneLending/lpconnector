@@ -25,38 +25,57 @@ class LDAPServer(object):
         return self.ldapServer
 
     def getAllUsers(self):
-        searchFilter = "(&(objectClass=" + LDAPUser.objectClass + ")(!(memberOf=cn=Service Accounts,ou=Users,o=59dcdedd4f0ae13f6196a659,dc=jumpcloud,dc=com)))"
-        searchAttributes = LDAPUser.attributes
+        searchFilter = "(&(objectClass=" + LDAPUser.objectClass + ")(!(memberOf=cn=Service Accounts," + self.baseDN + ")))"
 
-        return self.doSearch(searchFilter, searchAttributes, 'user')
+        return self.doSearch(searchFilter, LDAPUser.objectClass)
 
     def getAllGroups(self):
         searchFilter = "(&(objectClass=" + LDAPGroup.objectClass + "))"
-        searchAttributes = LDAPGroup.attributes
 
-        return self.doSearch(searchFilter, searchAttributes, 'group')
+        return self.doSearch(searchFilter, LDAPGroup.objectClass)
 
     def getUsersByUID(self, uids):
         searchFilter = ""
         if not isinstance(uids, list):
             searchFilter = "(uid=" + uids + ")"
         else:
-            for index, uid in enumerate(uids):
-                if index == 0:
-                    searchFilter += "(|"
+            searchFilter += "(|"
+            for uid in uids:
                 searchFilter += "(uid=" + uid + ")"
             searchFilter += ")"
         searchAttributes = LDAPUser.attributes
 
-        return self.doSearch(searchFilter, searchAttributes, 'user')
+        return self.doSearch(searchFilter, LDAPUser.objectClass)
 
-    def doSearch(self, sFilter, sAttributes, returnType):
+    def getUsersByGroup(self, gids):
+        searchFilter = "(&(objectClass=" + LDAPUser.objectClass + ")"
+        if not isinstance(gids, list):
+            searchFilter += "(memberOf=cn=" + gids + "," + self.baseDN + ")"
+        else:
+            searchFilter += "(|"
+            for gid in gids:
+                searchFilter += "(memberOf=cn=" + gid + "," + self.baseDN + ")"
+            searchFilter += ")"
+        searchFilter += ")"
+        searchAttributes = LDAPUser.attributes
+
+        return self.doSearch(searchFilter, LDAPUser.objectClass)
+
+    def doSearch(self, sFilter, ldapObjClass):
         sScope = ldap.SCOPE_SUBTREE
         result_set = []
 
         if self.ldapServer is None:
             print "No server present, binding to default server"
             self.bindToServer()
+
+        if ldapObjClass == LDAPUser.objectClass:
+            sAttributes = LDAPUser.attributes
+        elif ldapObjClass == LDAPGroup.objectClass:
+            sAttributes = LDAPGroup.attributes
+        else:
+            print "Invalid search type, must be a user or a group"
+            return result_set
 
         try:
             result_id = self.ldapServer.search(self.baseDN, sScope, sFilter, sAttributes)
@@ -66,9 +85,9 @@ class LDAPServer(object):
                     break
                 else:
                     if result_type == ldap.RES_SEARCH_ENTRY:
-                        if returnType == 'user':
+                        if ldapObjClass == LDAPUser.objectClass:
                             result_set.append(LDAPUser(**result_data[0][1]))
-                        elif returnType == 'group':
+                        elif ldapObjClass == LDAPGroup.objectClass:
                             result_set.append(LDAPGroup(**result_data[0][1]))
         except ldap.LDAPError, error:
             print error

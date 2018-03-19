@@ -3,8 +3,9 @@ from .client import LastPassClient
 
 class LastPassProvisioner(object):
 
-    def __init__(self, users, password, resetPwd):
-        self.users = users
+    def __init__(self, usersOrGroups, password, resetPwd, byGroup = False):
+        self.usersOrGroups = usersOrGroups
+        self.byGroup = byGroup
         self.password = password
         self.resetPwd = resetPwd
         self.client = LastPassClient()
@@ -14,13 +15,18 @@ class LastPassProvisioner(object):
         self.server.bindToServer()
         newUsers = []
         userCount = 0
-        if self.users is None:
+        if self.usersOrGroups is None:
             print "Provisioning ALL users..."
             newUsers = self.server.getAllUsers()
         else:
-            userCount = len(self.users)
-            print "Provisioning " + str(userCount) + " users..."
-            newUsers = self.server.getUsersByUID(self.users)
+            if self.byGroup:
+                groupCount = len(self.usersOrGroups)
+                print "Provisioning " + str(groupCount) + " group[s]..."
+                newUsers = self.server.getUsersByGroup(self.usersOrGroups)
+            else:
+                userCount = len(self.usersOrGroups)
+                print "Provisioning " + str(userCount) + " user[s]..."
+                newUsers = self.server.getUsersByUID(self.usersOrGroups)
         self.server.unbindServer()
         response = self.client.batchAdd(newUsers, self.password, self.resetPwd)
         if response.status_code == 200:

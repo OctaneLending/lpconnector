@@ -1,15 +1,19 @@
 """LastPass Connector
 
 Usage:
-    connector.py sync
-    connector.py provision [--users=UIDS] [--password=PWD] [--reset-password=BOOL]
-    connector.py getldapusers [--users=UIDS]
-    connector.py getlastpassusers [--email=EMAIL] [--disabled=BOOL] [--admin=BOOL]
-    connector.py (-h | --help)
+    lpconnector sync [--users=UIDs | --groups=GIDs] [--no-add] [--no-delete] [--no-update]
+    lpconnector provision [--users=UIDs | --groups=GIDs] [--password=PWD] [--reset-password=BOOL]
+    lpconnector getldapusers [--users=UIDs]
+    lpconnector getlastpassusers [--email=EMAIL] [--disabled=BOOL] [--admin=BOOL]
+    lpconnector  (-h | --help)
 
 Options:
     -h --help               Show help
-    --users=UIDS            Comma separated list of uids to provision
+    --users=UIDs            Comma separated list of uids to provision/sync
+    --groups=GIDs           Comman seprated list of group names to provision/sync
+    --no-add                Don't add new users on sync
+    --no-delete             Don't delete missing users on sync
+    --no-update             Don't update a user's groups on sync
     --password=PWD          Default password for provisioned users
     --reset-password=BOOL   Reset the default password [default: True]
     --email=EMAIL           Get a single user by their full email address
@@ -32,7 +36,7 @@ load_dotenv(dotenv_path)
 
 def main():
     args = docopt(__doc__)
-
+    print args
     if args.get('sync'):
         print "Syncing LastPass to LDAP..."
         syncer = LastPassSyncer()
@@ -40,11 +44,19 @@ def main():
 
     if args.get('provision'):
         users = None
+        groups = None
+        byGroup = False
         if args.get('--users') is not None:
             users = args.get('--users').split(',')
+        if args.get('--groups') is not None:
+            groups = args.get('--groups').split(',')
+            byGroup = True
         password = args.get('--password')
         resetPwd = strtobool(args.get('--reset-password'))
-        provisioner = LastPassProvisioner(users, password, resetPwd)
+        if byGroup:
+            provisioner = LastPassProvisioner(groups, password, resetPwd, byGroup)
+        else:
+            provisioner = LastPassProvisioner(users, password, resetPwd)
         provisioner.run()
 
     if args.get('getldapusers'):
@@ -65,7 +77,7 @@ def main():
             result = ldapServer.getUsersByUID(users)
         ldapServer.unbindServer()
         for ldapUser in result:
-            print ldapUser
+            print ldapUser.__dict__
 
     if args.get('getlastpassusers'):
         user = None
