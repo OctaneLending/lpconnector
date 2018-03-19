@@ -38,8 +38,18 @@ def main():
     args = docopt(__doc__)
     print args
     if args.get('sync'):
-        print "Syncing LastPass to LDAP..."
-        syncer = LastPassSyncer()
+        users = None
+        groups = None
+        byGroup = False
+        if args.get('--users') is not None:
+            users = args.get('--users').split(',')
+        if args.get('--groups') is not None:
+            groups = args.get('--groups').split(',')
+            byGroup = True
+        if byGroup:
+            syncer = LastPassSyncer(groups, args.get('--no-add'), args.get('--no-delete'), args.get('--no-update'), byGroup)
+        else:
+            syncer = LastPassSyncer(users, args.get('--no-add'), args.get('--no-delete'), args.get('--no-update'))
         syncer.run()
 
     if args.get('provision'):
@@ -95,7 +105,8 @@ def main():
             admin = 1 if strtobool(args.get('--admin')) == True else 0
 
         lpClient = LastPassClient()
-        lpClient.getUserData(user, disabled, admin)
+        users = lpClient.getUserData(user, disabled, admin)
+        print "Got " + str(len(users)) + " user[s]"
 
 if __name__ == "__main__":
     main()

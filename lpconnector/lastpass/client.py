@@ -1,4 +1,5 @@
 import requests,os,json
+from .user import LastPassUser
 
 class LastPassClient(object):
 
@@ -45,5 +46,17 @@ class LastPassClient(object):
                 dataPayload['admin'] = str(admin)
             payload['data'] = dataPayload
 
+        users = []
         response = requests.post(self.url, json=payload)
-        print response.json()
+        if response.status_code != 200:
+            print "Error getting LastPass Users"
+        else:
+            jsonResponse = response.json()
+            if jsonResponse.get('error'):
+                print "Could not find user: " + user
+            else:
+                jsonReturn = response.json().get('Users')
+                for user in jsonReturn.values():
+                    users.append(LastPassUser(**user))
+
+        return users
