@@ -2,6 +2,7 @@ import ldap,os
 from .user import LDAPUser
 from .group import LDAPGroup
 
+
 class LDAPServer(object):
 
     def __init__(self, config):

@@ -1,6 +1,7 @@
 import requests,os,json
 from .user import LastPassUser
 
+
 class LastPassClient(object):
 
     url = "https://lastpass.com/enterpriseapi.php"
@@ -60,3 +61,19 @@ class LastPassClient(object):
                     users.append(LastPassUser(**user))
 
         return users
+
+    def deleteUser(self, user, action = 0):
+        cmd = "deluser"
+        payload = self.basePayload
+        payload['cmd'] = cmd
+        payload['data'] = {"username": user, "deleteaction": action}
+        response = requests.post(self.url, json=payload)
+        return response
+
+    def syncGroups(self, userPayload):
+        cmd = "batchchangegrp"
+        payload = self.basePayload
+        payload['cmd'] = cmd
+        payload['data'] = userPayload
+        response = requests.post(self.url, json=payload)
+        return response

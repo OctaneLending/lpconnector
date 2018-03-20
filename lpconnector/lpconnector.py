@@ -29,6 +29,7 @@ from .lastpass.client import LastPassClient
 from .lastpass.sync import LastPassSyncer
 from .lastpass.provision import LastPassProvisioner
 
+
 def getConfig(args):
     config = ConfigParser.ConfigParser()
     config.read(os.path.join(os.path.abspath('lpconnector'), 'config/config.ini'))

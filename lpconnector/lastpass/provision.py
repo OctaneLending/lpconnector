@@ -2,6 +2,7 @@ from distutils.util import strtobool
 from ..ldap.server import LDAPServer
 from .client import LastPassClient
 
+
 class LastPassProvisioner(object):
 
     def __init__(self, config, usersOrGroups, byGroup = False):
