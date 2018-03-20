@@ -99,3 +99,6 @@ ENV/
 
 # config files
 *.ini
+
+# other stuff?
+.idea/

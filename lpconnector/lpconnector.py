@@ -31,11 +31,7 @@ from .lastpass.provision import LastPassProvisioner
 
 def getConfig(args):
     config = ConfigParser.ConfigParser()
-    configPath = os.path.join(os.path.abspath(__path__), 'config/config.ini')
-    print configPath
-    configFile = open(configPath)
-    print configFile.read()
-    config.read(os.path.join(os.path.abspath(__path__), 'config/config.ini'))
+    config.read(os.path.join(os.path.abspath('lpconnector'), 'config/config.ini'))
     config.add_section('ARGS')
     for key, value in args.items():
         key = key[len('--'):] if key.startswith('--') else key
@@ -48,7 +44,6 @@ def main():
     config = getConfig(args)
 
     if args.get('getconfig'):
-        print config.defaults()
         print config.sections()
 
     if args.get('sync'):

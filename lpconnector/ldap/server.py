@@ -5,13 +5,14 @@ from .group import LDAPGroup
 class LDAPServer(object):
 
     def __init__(self, config):
-        self.server = config.get("LDAP", "SERVER")
-        self.baseDN = config.get("LDAP", "BASE_DN")
-        self.user = config.get("LDAP", "BINDING_USER_UID")
-        self.pwd = config.get("LDAP", "BINDING_USER_PWD")
+        self.server = config.get('LDAP', 'SERVER')
+        self.baseDN = config.get('LDAP', 'BASE_DN')
+        self.user = config.get('LDAP', 'BINDING_USER_UID')
+        self.pwd = config.get('LDAP', 'BINDING_USER_PWD')
         self.ldapServer = None
 
     def bindToServer(self):
+        print self.server
         self.ldapServer = ldap.initialize(self.server)
 
         bindDN = "uid=" + self.user + "," + self.baseDN
