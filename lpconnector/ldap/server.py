@@ -12,12 +12,10 @@ class LDAPServer(object):
         self.ldapServer = None
 
     def bindToServer(self):
-        print self.server
         self.ldapServer = ldap.initialize(self.server)
 
         bindDN = "uid=" + self.user + "," + self.baseDN
         bindPW = self.pwd
-        print bindDN + " : " + bindPW
         try:
             self.ldapServer.protocol_version = ldap.VERSION3
             self.ldapServer.simple_bind_s(bindDN, bindPW)

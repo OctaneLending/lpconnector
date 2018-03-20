@@ -17,6 +17,7 @@ class LastPassSyncer(object):
     def run(self):
         self.server.bindToServer()
         ldapUsers = []
+        lastPassUsers = []
         userCount = 0
         if self.usersOrGroups is None:
             print "Syncing ALL users to LastPass..."
@@ -34,15 +35,11 @@ class LastPassSyncer(object):
                 print "Syncing " + str(count) + " user[s]..."
                 ldapUsers = self.server.getUsersByUID(self.usersOrGroups)
                 print "Retrieving " + str(len(ldapUsers)) + " LDAP Users..."
-
             ldapUserEmails = map(lambda x: x.email, ldapUsers)
-            print ldapUserEmails
-            lastPassUsers = []
             for email in ldapUserEmails:
                 lpUser = self.client.getUserData(email)
                 if len(lpUser) > 0:
                     lastPassUsers.append(self.client.getUserData(email)[0])
-            print lastPassUsers
             print "Retrieving " + str(len(lastPassUsers)) + " LastPass Users..."
 
         self.server.unbindServer()
@@ -53,11 +50,13 @@ class LastPassSyncer(object):
             newUsers = self.getNewUsers(ldapUsers, lastPassUsers)
         if not self.noDel:
             delUsers = self.getDelUsers(ldapUsers, lastPassUsers)
-        print newUsers
-        print delUsers
-        return
-        self.sync(noUp, newUsers, delUsers)
+        print str(len(newUsers)) + " user[s] to add..."
+        print str(len(delUsers)) + " user[s] to delete..."
 
+        self.sync(newUsers, delUsers)
+        return
+
+    def sync(self, newUsers, delUsers):
         return
 
     def getNewUsers(self, ldapUsers, lastPassUsers):

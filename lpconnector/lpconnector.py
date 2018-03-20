@@ -35,7 +35,8 @@ def getConfig(args):
     config.add_section('ARGS')
     for key, value in args.items():
         key = key[len('--'):] if key.startswith('--') else key
-        config.set('ARGS', key, value)
+        print "Setting config section ARGS with: " + key + " = " + str(value)
+        config.set('ARGS', key, str(value))
     return config
 
 
