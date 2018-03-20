@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05be746c-ec87-4e21-bb47-4fa184931fe2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
-      <change beforePath="$PROJECT_DIR$/lpconnector/lastpass/client.py" afterPath="$PROJECT_DIR$/lpconnector/lastpass/client.py" />
-      <change beforePath="$PROJECT_DIR$/lpconnector/lastpass/provision.py" afterPath="$PROJECT_DIR$/lpconnector/lastpass/provision.py" />
-      <change beforePath="$PROJECT_DIR$/lpconnector/lastpass/sync.py" afterPath="$PROJECT_DIR$/lpconnector/lastpass/sync.py" />
-      <change beforePath="$PROJECT_DIR$/lpconnector/ldap/server.py" afterPath="$PROJECT_DIR$/lpconnector/ldap/server.py" />
-      <change beforePath="$PROJECT_DIR$/lpconnector/lpconnector.py" afterPath="$PROJECT_DIR$/lpconnector/lpconnector.py" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
       <change beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,11 +19,21 @@
           <file leaf-file-name="setup.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/setup.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="22" column="43" lean-forward="false" selection-start-line="22" selection-start-column="43" selection-end-line="22" selection-end-column="43" />
+                <state relative-caret-position="300">
+                  <caret line="20" column="6" lean-forward="false" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
                   <folding>
                     <element signature="e#0#9#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Makefile" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Makefile">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="225">
+                  <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -55,7 +58,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="sync.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="sync.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lpconnector/lastpass/sync.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="510">
@@ -106,10 +109,11 @@
         <option value="$PROJECT_DIR$/lpconnector/config/config.ini" />
         <option value="$PROJECT_DIR$/lpconnector/lastpass/client.py" />
         <option value="$PROJECT_DIR$/lpconnector/ldap/server.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/lpconnector/lastpass/provision.py" />
         <option value="$PROJECT_DIR$/lpconnector/lastpass/sync.py" />
         <option value="$PROJECT_DIR$/lpconnector/lpconnector.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/Makefile" />
       </list>
     </option>
   </component>
@@ -375,16 +379,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="43" lean-forward="false" selection-start-line="22" selection-start-column="43" selection-end-line="22" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lpconnector/lastpass/provision.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -410,6 +404,24 @@
           <folding>
             <element signature="e#1108#1130#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="6" lean-forward="false" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
