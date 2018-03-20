@@ -108,6 +108,3 @@ def main():
         users = lpClient.getUserData(user, disabled, admin)
         print "Got " + str(len(users)) + " user[s]"
 
-if __name__ == "__main__":
-    main()
-

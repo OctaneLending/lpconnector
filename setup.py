@@ -19,6 +19,7 @@ setup(
         'docopt==0.6.2',
     ],
     packages=find_packages(exclude=['docs','tests']),
+    package_data={'': ['.env']},
     long_description=read('README.rst'),
     entry_points = {
         'console_scripts': [

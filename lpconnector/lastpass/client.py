@@ -52,7 +52,8 @@ class LastPassClient(object):
             print "Error getting LastPass Users"
         else:
             jsonResponse = response.json()
-            if jsonResponse.get('error'):
+            print jsonResponse.get('status')
+            if jsonResponse.get('status') in ['WARN', 'FAIL']:
                 print "Could not find user: " + user
             else:
                 jsonReturn = response.json().get('Users')
