@@ -114,4 +114,5 @@ def main():
         lpClient = LastPassClient(config)
         users = lpClient.getUserData(user, disabled, admin)
         print "Got " + str(len(users)) + " user[s]"
+        print users
 

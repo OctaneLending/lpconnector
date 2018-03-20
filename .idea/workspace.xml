@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05be746c-ec87-4e21-bb47-4fa184931fe2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/lpconnector/lastpass/client.py" afterPath="$PROJECT_DIR$/lpconnector/lastpass/client.py" />
       <change beforePath="$PROJECT_DIR$/lpconnector/ldap/server.py" afterPath="$PROJECT_DIR$/lpconnector/ldap/server.py" />
       <change beforePath="$PROJECT_DIR$/lpconnector/lpconnector.py" afterPath="$PROJECT_DIR$/lpconnector/lpconnector.py" />
     </list>
@@ -61,11 +61,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="server.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="server.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lpconnector/ldap/server.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="180">
-                  <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+                <state relative-caret-position="255">
+                  <caret line="19" column="19" lean-forward="false" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="client.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/lpconnector/lastpass/client.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="780">
+                  <caret line="53" column="42" lean-forward="false" selection-start-line="53" selection-start-column="42" selection-end-line="53" selection-end-column="42" />
                   <folding />
                 </state>
               </provider>
@@ -78,8 +88,8 @@
           <file leaf-file-name="lpconnector.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lpconnector/lpconnector.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="267">
-                  <caret line="45" column="29" lean-forward="false" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+                <state relative-caret-position="1073">
+                  <caret line="116" column="19" lean-forward="false" selection-start-line="116" selection-start-column="19" selection-end-line="116" selection-end-column="19" />
                   <folding>
                     <element signature="e#1108#1130#0" expanded="true" />
                   </folding>
@@ -98,13 +108,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/lpconnector/config/config.ini" />
-        <option value="$PROJECT_DIR$/lpconnector/lastpass/client.py" />
         <option value="$PROJECT_DIR$/lpconnector/lastpass/provision.py" />
         <option value="$PROJECT_DIR$/lpconnector/lastpass/sync.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/Makefile" />
-        <option value="$PROJECT_DIR$/lpconnector/lpconnector.py" />
         <option value="$PROJECT_DIR$/lpconnector/ldap/server.py" />
+        <option value="$PROJECT_DIR$/lpconnector/lastpass/client.py" />
+        <option value="$PROJECT_DIR$/lpconnector/lpconnector.py" />
       </list>
     </option>
   </component>
@@ -166,27 +176,6 @@
               <item name="lastpass-ldap-sync" type="b2602c69:ProjectViewProjectNode" />
               <item name="lastpass-ldap-sync" type="462c0819:PsiDirectoryNode" />
               <item name="venv" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lastpass-ldap-sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lastpass-ldap-sync" type="462c0819:PsiDirectoryNode" />
-              <item name="venv" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lastpass-ldap-sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lastpass-ldap-sync" type="462c0819:PsiDirectoryNode" />
-              <item name="venv" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="python2.7" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lastpass-ldap-sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lastpass-ldap-sync" type="462c0819:PsiDirectoryNode" />
-              <item name="venv" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="python2.7" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -313,13 +302,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lpconnector/lastpass/client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="43" lean-forward="false" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lpconnector/config/config.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -378,16 +360,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lpconnector/lpconnector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="45" column="29" lean-forward="false" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
-          <folding>
-            <element signature="e#1108#1130#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -400,9 +372,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lpconnector/ldap/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+        <state relative-caret-position="255">
+          <caret line="19" column="19" lean-forward="false" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lpconnector/lastpass/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="53" column="42" lean-forward="false" selection-start-line="53" selection-start-column="42" selection-end-line="53" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lpconnector/lpconnector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1073">
+          <caret line="116" column="19" lean-forward="false" selection-start-line="116" selection-start-column="19" selection-end-line="116" selection-end-column="19" />
+          <folding>
+            <element signature="e#1108#1130#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -17,7 +17,7 @@ class LDAPServer(object):
 
         bindDN = "uid=" + self.user + "," + self.baseDN
         bindPW = self.pwd
-
+        print bindDN + " : " + bindPW
         try:
             self.ldapServer.protocol_version = ldap.VERSION3
             self.ldapServer.simple_bind_s(bindDN, bindPW)
