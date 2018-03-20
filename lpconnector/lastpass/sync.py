@@ -1,16 +1,17 @@
+from distutils.util import strtobool
 from ..ldap.server import LDAPServer
 from .client import LastPassClient
 
 class LastPassSyncer(object):
 
-    def __init__(self, usersOrGroups, noAdd, noDel, noUp, byGroup = False):
+    def __init__(self, config, usersOrGroups, byGroup = False):
         self.usersOrGroups = usersOrGroups
         self.byGroup = byGroup
-        self.noAdd = noAdd
-        self.noDel = noDel
-        self.noUp = noUp
-        self.client = LastPassClient()
-        self.server = LDAPServer()
+        self.noAdd = strtobool(config.get('ARGS', 'no-add'))
+        self.noDel = strtobool(config.get('ARGS', 'no-delete'))
+        self.noUp = strtobool(config.get('ARGS', 'no-update'))
+        self.client = LastPassClient(config)
+        self.server = LDAPServer(config)
         return
 
     def run(self):

@@ -5,10 +5,10 @@ class LastPassClient(object):
 
     url = "https://lastpass.com/enterpriseapi.php"
 
-    def __init__(self, cid = None, user = None, key = None):
-        self.cid = cid if cid else os.getenv('LASTPASS_API_CID')
-        self.user = user if user else os.getenv('LASTPASS_API_USER')
-        self.key = key if key else os.getenv('LASTPASS_API_SECRET')
+    def __init__(self, config):
+        self.cid = config.get('LASTPASS', 'API_CID')
+        self.user = config.get('LASTPASS', 'API_USER')
+        self.key = config.get('LASTPASS', 'API_SECRET')
         self.basePayload = {
             "cid": self.cid,
             "provhash": self.key,
@@ -52,7 +52,8 @@ class LastPassClient(object):
             print "Error getting LastPass Users"
         else:
             jsonResponse = response.json()
-            if jsonResponse.get('error'):
+            print jsonResponse.get('status')
+            if jsonResponse.get('status') in ['WARN', 'FAIL']:
                 print "Could not find user: " + user
             else:
                 jsonReturn = response.json().get('Users')

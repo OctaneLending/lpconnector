@@ -5,6 +5,7 @@ Usage:
     lpconnector provision [--users=UIDs | --groups=GIDs] [--password=PWD] [--reset-password=BOOL]
     lpconnector getldapusers [--users=UIDs]
     lpconnector getlastpassusers [--email=EMAIL] [--disabled=BOOL] [--admin=BOOL]
+    lpconnector getconfig
     lpconnector  (-h | --help)
 
 Options:
@@ -20,6 +21,7 @@ Options:
     --disabled=BOOL         Get only disabled users
     --admin=BOOL            Get only admin users
 """
+import os,ConfigParser
 from docopt import docopt
 from distutils.util import strtobool
 from .ldap.server import LDAPServer
@@ -27,16 +29,28 @@ from .lastpass.client import LastPassClient
 from .lastpass.sync import LastPassSyncer
 from .lastpass.provision import LastPassProvisioner
 
-import os
-from dotenv import load_dotenv
+def getConfig(args):
+    config = ConfigParser.ConfigParser()
+    configPath = os.path.join(os.path.abspath(__path__), 'config/config.ini')
+    print configPath
+    configFile = open(configPath)
+    print configFile.read()
+    config.read(os.path.join(os.path.abspath(__path__), 'config/config.ini'))
+    config.add_section('ARGS')
+    for key, value in args.items():
+        key = key[len('--'):] if key.startswith('--') else key
+        config.set('ARGS', key, value)
+    return config
 
-APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
-dotenv_path = os.path.join(APP_ROOT, '.env')
-load_dotenv(dotenv_path)
 
 def main():
     args = docopt(__doc__)
-    print args
+    config = getConfig(args)
+
+    if args.get('getconfig'):
+        print config.defaults()
+        print config.sections()
+
     if args.get('sync'):
         users = None
         groups = None
@@ -47,9 +61,9 @@ def main():
             groups = args.get('--groups').split(',')
             byGroup = True
         if byGroup:
-            syncer = LastPassSyncer(groups, args.get('--no-add'), args.get('--no-delete'), args.get('--no-update'), byGroup)
+            syncer = LastPassSyncer(config, groups, byGroup)
         else:
-            syncer = LastPassSyncer(users, args.get('--no-add'), args.get('--no-delete'), args.get('--no-update'))
+            syncer = LastPassSyncer(config, users)
         syncer.run()
 
     if args.get('provision'):
@@ -61,12 +75,10 @@ def main():
         if args.get('--groups') is not None:
             groups = args.get('--groups').split(',')
             byGroup = True
-        password = args.get('--password')
-        resetPwd = strtobool(args.get('--reset-password'))
         if byGroup:
-            provisioner = LastPassProvisioner(groups, password, resetPwd, byGroup)
+            provisioner = LastPassProvisioner(config, groups, byGroup)
         else:
-            provisioner = LastPassProvisioner(users, password, resetPwd)
+            provisioner = LastPassProvisioner(config, users)
         provisioner.run()
 
     if args.get('getldapusers'):
@@ -78,7 +90,7 @@ def main():
         else:
             print "Retrieving all users from the directory..."
 
-        ldapServer = LDAPServer()
+        ldapServer = LDAPServer(config)
         ldapServer.bindToServer()
         result = []
         if users is None:
@@ -104,10 +116,7 @@ def main():
         if args.get('--admin') is not None:
             admin = 1 if strtobool(args.get('--admin')) == True else 0
 
-        lpClient = LastPassClient()
+        lpClient = LastPassClient(config)
         users = lpClient.getUserData(user, disabled, admin)
         print "Got " + str(len(users)) + " user[s]"
-
-if __name__ == "__main__":
-    main()
 

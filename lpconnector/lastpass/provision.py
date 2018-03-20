@@ -1,15 +1,16 @@
+from distutils.util import strtobool
 from ..ldap.server import LDAPServer
 from .client import LastPassClient
 
 class LastPassProvisioner(object):
 
-    def __init__(self, usersOrGroups, password, resetPwd, byGroup = False):
+    def __init__(self, config, usersOrGroups, byGroup = False):
         self.usersOrGroups = usersOrGroups
         self.byGroup = byGroup
-        self.password = password
-        self.resetPwd = resetPwd
-        self.client = LastPassClient()
-        self.server = LDAPServer()
+        self.password = config.get('ARGS', 'password')
+        self.resetPwd = strtobool(config.get('ARGS', 'reset-password'))
+        self.client = LastPassClient(config)
+        self.server = LDAPServer(config)
 
     def run(self):
         self.server.bindToServer()

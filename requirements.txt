@@ -5,7 +5,6 @@ idna==2.6
 lpconnector==0.1.0
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
-python-dotenv==0.8.2
 python-ldap==3.0.0
 requests==2.18.4
 urllib3==1.22
