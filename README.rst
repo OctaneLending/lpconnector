@@ -14,16 +14,16 @@ Setup
 
 Before installing the client run::
 
-    $ mv .env.template .env
+    $ mv lpconnector/config/config.ini.template lpconnector/conig/config.ini
 
-And then update the ``.env`` file with the proper paramters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key
+And then update the ``config.ini`` file with the proper paramters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key
 
 Usage
 -----
 
 Client commands are as follows::
 
-    lpconnector sync
+    lpconnector sync [--users=UIDs | --groups=GIDs] [--no-add] [--no-delete] [--no-update]
     lpconnector provision [--users=UIDS] [--password=PWD] [--reset-password=BOOL]
     lpconnector getldapusers [--users=UIDS]
     lpconnector getlastpassusers [--email=EMAIL] [--disabled=BOOL] [--admin=BOOL]
@@ -33,9 +33,13 @@ Options
 -------
 
 Details on command options are as follows::
-
+    
     -h --help               Show help
-    --users=UIDS            Comma separated list of uids to provision
+    --users=UIDs            Comma separated list of uids to provision/sync
+    --groups=GIDs           Comman seprated list of group names to provision/sync
+    --no-add                Don't add new users on sync
+    --no-delete             Don't delete missing users on sync
+    --no-update             Don't update a user's groups on sync
     --password=PWD          Default password for provisioned users
     --reset-password=BOOL   Reset the default password [default: True]
     --email=EMAIL           Get a single user by their full email address
