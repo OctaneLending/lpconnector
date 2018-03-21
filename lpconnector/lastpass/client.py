@@ -1,4 +1,4 @@
-import requests,os,json
+import requests,sys
 from .user import LastPassUser
 
 
@@ -30,8 +30,7 @@ class LastPassClient(object):
                     userPayload['password_reset_required'] = pwdReset
             payload['data'].append(userPayload)
 
-        response = requests.post(self.url, json=payload)
-        return response
+        return self.postData(payload)
 
     def getUserData(self, user = None, disabled = None, admin = None):
         cmd = "getuserdata"
@@ -48,18 +47,9 @@ class LastPassClient(object):
             payload['data'] = dataPayload
 
         users = []
-        response = requests.post(self.url, json=payload)
-        if response.status_code != 200:
-            print "Error getting LastPass Users"
-        else:
-            jsonResponse = response.json()
-            if jsonResponse.get('status') in ['WARN', 'FAIL']:
-                print "Could not find user: " + user
-            else:
-                jsonReturn = response.json().get('Users')
-                for user in jsonReturn.values():
-                    users.append(LastPassUser(**user))
-
+        response = self.getData(payload)
+        for user in response.get('Users').values():
+            users.append(LastPassUser(**user))
         return users
 
     def deleteUser(self, user, action = 0):
@@ -67,13 +57,42 @@ class LastPassClient(object):
         payload = self.basePayload
         payload['cmd'] = cmd
         payload['data'] = {"username": user, "deleteaction": action}
-        response = requests.post(self.url, json=payload)
-        return response
+        return self.postData(payload)
 
     def syncGroups(self, userPayload):
         cmd = "batchchangegrp"
         payload = self.basePayload
         payload['cmd'] = cmd
         payload['data'] = userPayload
+        return self.postData(payload)
+
+    def getData(self, payload):
         response = requests.post(self.url, json=payload)
-        return response
+        try:
+            jsonResponse = response.json()
+            if 'status' in jsonResponse:
+                status = jsonResponse.get('status')
+                print status + ": " + jsonResponse.get('errors')
+                if status == 'FAIL':
+                    sys.exit('API connection failed; exiting.')
+                return {}
+            else:
+                return jsonResponse
+        except Exception:
+            sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
+        return {}
+
+    def postData(self, payload):
+        response = requests.post(self.url, json=payload)
+        if 'json' in response.headers['Content-Type']:
+            jsonResponse = response.json()
+            status = jsonResponse.get('status')
+            if status != 'OK':
+                print status + ": " + jsonResponse.get('errors')
+                if status == 'FAIL':
+                    sys.exit('API connection failed; exiting.')
+                return False
+        elif 'xml' in response.headers['Content-Type']:
+            sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
+        return True
+

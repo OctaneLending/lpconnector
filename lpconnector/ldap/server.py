@@ -1,4 +1,4 @@
-import ldap,os
+import ldap,sys
 from .user import LDAPUser
 from .group import LDAPGroup
 
@@ -22,6 +22,7 @@ class LDAPServer(object):
             self.ldapServer.simple_bind_s(bindDN, bindPW)
         except ldap.LDAPError, error:
             print error
+            sys.exit("LDAP Connection failed; exiting")
         return self.ldapServer
 
     def getAllUsers(self):
@@ -43,7 +44,6 @@ class LDAPServer(object):
             for uid in uids:
                 searchFilter += "(uid=" + uid + ")"
             searchFilter += ")"
-        searchAttributes = LDAPUser.attributes
 
         return self.doSearch(searchFilter, LDAPUser.objectClass)
 
@@ -57,7 +57,6 @@ class LDAPServer(object):
                 searchFilter += "(memberOf=cn=" + gid + "," + self.baseDN + ")"
             searchFilter += ")"
         searchFilter += ")"
-        searchAttributes = LDAPUser.attributes
 
         return self.doSearch(searchFilter, LDAPUser.objectClass)
 
@@ -81,7 +80,7 @@ class LDAPServer(object):
             result_id = self.ldapServer.search(self.baseDN, sScope, sFilter, sAttributes)
             while 1:
                 result_type, result_data = self.ldapServer.result(result_id, 0)
-                if (result_data == []):
+                if result_data == []:
                     break
                 else:
                     if result_type == ldap.RES_SEARCH_ENTRY:
@@ -91,7 +90,7 @@ class LDAPServer(object):
                             result_set.append(LDAPGroup(**result_data[0][1]))
         except ldap.LDAPError, error:
             print error
-
+            sys.exit("LDAP Connection failed; exiting")
         return result_set
 
     def unbindServer(self):

@@ -48,6 +48,7 @@ def main():
     if args.get('getconfig'):
         config = getConfig(args, True)
         print config.sections()
+        return
 
     config = getConfig(args)
 
