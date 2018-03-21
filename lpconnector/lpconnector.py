@@ -1,8 +1,8 @@
 """LastPass Connector
 
 Usage:
-    lpconnector sync [--users=UIDs | --groups=GIDs] [--no-add] [--no-delete] [--no-update]
-    lpconnector provision [--users=UIDs | --groups=GIDs] [--password=PWD] [--reset-password=BOOL]
+    lpconnector sync [--users=UIDs | --groups=GIDs] [--no-add] [--no-delete] [--no-update] [--dry-run]
+    lpconnector provision [--users=UIDs | --groups=GIDs] [--password=PWD] [--reset-password=BOOL] [--dry-run]
     lpconnector getldapusers [--users=UIDs]
     lpconnector getlastpassusers [--email=EMAIL] [--disabled=BOOL] [--admin=BOOL]
     lpconnector getconfig
@@ -11,7 +11,8 @@ Usage:
 Options:
     -h --help               Show help
     --users=UIDs            Comma separated list of uids to provision/sync
-    --groups=GIDs           Comman seprated list of group names to provision/sync
+    --groups=GIDs           Comma separated list of group names to provision/sync
+    --dry-run               Print out API requests instead of sending
     --no-add                Don't add new users on sync
     --no-delete             Don't delete missing users on sync
     --no-update             Don't update a user's groups on sync

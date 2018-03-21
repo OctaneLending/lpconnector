@@ -7,6 +7,7 @@ class LastPassClient(object):
     url = "https://lastpass.com/enterpriseapi.php"
 
     def __init__(self, config):
+        self.dryRun = config.get('ARGS', 'dry-run')
         self.cid = config.get('LASTPASS', 'API_CID')
         self.user = config.get('LASTPASS', 'API_USER')
         self.key = config.get('LASTPASS', 'API_SECRET')
@@ -67,6 +68,9 @@ class LastPassClient(object):
         return self.postData(payload)
 
     def getData(self, payload):
+        if self.dryRun:
+            print payload
+            return {}
         response = requests.post(self.url, json=payload)
         try:
             jsonResponse = response.json()
@@ -83,6 +87,9 @@ class LastPassClient(object):
         return {}
 
     def postData(self, payload):
+        if self.dryRun:
+            print payload
+            return True
         response = requests.post(self.url, json=payload)
         if 'json' in response.headers['Content-Type']:
             jsonResponse = response.json()
