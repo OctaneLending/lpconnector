@@ -1,17 +1,17 @@
 """LastPass Connector
 
 Usage:
-    lpconnector sync [--users=UIDs | --groups=GIDs] [--no-add] [--no-delete] [--no-update] [--dry-run]
-    lpconnector provision [--users=UIDs | --groups=GIDs] [--password=PWD] [--reset-password=BOOL] [--dry-run]
-    lpconnector getldapusers [--users=UIDs]
+    lpconnector sync [--users=UIDs | --groups=GCNs] [--no-add] [--no-delete] [--no-update] [--dry-run]
+    lpconnector provision [--users=UIDs | --groups=GCNs] [--password=PWD] [--reset-password=BOOL] [--dry-run]
+    lpconnector getldapusers [--users=UIDs | --groups=GCNs]
     lpconnector getlastpassusers [--email=EMAIL] [--disabled=BOOL] [--admin=BOOL]
     lpconnector getconfig
     lpconnector  (-h | --help)
 
 Options:
     -h --help               Show help
-    --users=UIDs            Comma separated list of uids to provision/sync
-    --groups=GIDs           Comma separated list of group names to provision/sync
+    --users=UIDs            Comma separated list of user uids to provision/sync
+    --groups=GCNs           Comma separated list of group common names to provision/sync
     --dry-run               Print out API requests instead of sending
     --no-add                Don't add new users on sync
     --no-delete             Don't delete missing users on sync
@@ -66,7 +66,9 @@ def main():
             syncer = LastPassSyncer(config, groups, byGroup)
         else:
             syncer = LastPassSyncer(config, users)
-        syncer.run()
+        if syncer.run():
+            print "Completed!"
+        return
 
     if args.get('provision'):
         users = None
@@ -81,21 +83,31 @@ def main():
             provisioner = LastPassProvisioner(config, groups, byGroup)
         else:
             provisioner = LastPassProvisioner(config, users)
-        provisioner.run()
+        if provisioner.run():
+            print "Completed!"
+        return
 
     if args.get('getldapusers'):
         users = None
+        groups = None
+        byGroup = False
         if args.get('--users') is not None:
             users = args.get('--users').split(',')
-        if users:
-            print "Retrieving " + str(len(users)) + " users from the directory..."
+        if args.get('--groups') is not None:
+            groups = args.get('--groups').split(',')
+            byGroup = True
+        if users or groups:
+            count = str(len(groups)) + " group[s]" if byGroup else len(users) + " user[s]"
+            print "Retrieving " + count + " from the directory..."
         else:
             print "Retrieving all users from the directory..."
 
         ldapServer = LDAPServer(config)
         ldapServer.bindToServer()
         result = []
-        if users is None:
+        if byGroup:
+            result = ldapServer.getUsersByGroup(groups)
+        elif users is None:
             result = ldapServer.getAllUsers()
         else:
             result = ldapServer.getUsersByUID(users)

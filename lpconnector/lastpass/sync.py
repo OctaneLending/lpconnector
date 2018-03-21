@@ -1,3 +1,4 @@
+import sys
 from distutils.util import strtobool
 from ..ldap.server import LDAPServer
 from .client import LastPassClient
@@ -19,7 +20,6 @@ class LastPassSyncer(object):
         self.server.bindToServer()
         ldapUsers = []
         lastPassUsers = []
-        userCount = 0
         if self.usersOrGroups is None:
             print "Syncing ALL users to LastPass..."
             ldapUsers = self.server.getAllUsers()
@@ -29,13 +29,12 @@ class LastPassSyncer(object):
         else:
             count = len(self.usersOrGroups)
             if self.byGroup:
-                print "Syncing " + str(count) + " group[s]..."
+                print "Syncing " + str(count) + " group(s)..."
                 ldapUsers = self.server.getUsersByGroup(self.usersOrGroups)
-                print "Retrieving " + str(len(ldapUsers)) + " LDAP Users..."
             else:
-                print "Syncing " + str(count) + " user[s]..."
+                print "Syncing " + str(count) + " user(s)..."
                 ldapUsers = self.server.getUsersByUID(self.usersOrGroups)
-                print "Retrieving " + str(len(ldapUsers)) + " LDAP Users..."
+            print "Retrieving " + str(len(ldapUsers)) + " LDAP Users..."
             ldapUserEmails = map(lambda x: x.email, ldapUsers)
             for email in ldapUserEmails:
                 lpUser = self.client.getUserData(email)
@@ -48,33 +47,37 @@ class LastPassSyncer(object):
             print "Syncing successful."
         else:
             print "Syncing failed."
-        return
+        return True
 
     def sync(self, ldapUsers, lastPassUsers):
         if not self.noAdd:
             newUsers = self.getNewUsers(ldapUsers, lastPassUsers)
-            print str(len(newUsers)) + " user[s] to add..."
-            response = self.client.batchAdd(newUsers)
-            if response.status_code == 200:
-                print str(len(newUsers)) + " user[s] successfully added..."
+            if len(newUsers) > 0:
+                print str(len(newUsers)) + " user(s) to add..."
+                if self.client.batchAdd(newUsers):
+                    print str(len(newUsers)) + " user(s) successfully added..."
+                else:
+                    print "Failed to add users"
+                    return False
             else:
-                print response.error
-                return False
+                print "No users to add"
 
         if not self.noDel:
             delUsers = self.getDelUsers(ldapUsers, lastPassUsers)
-            print str(len(delUsers)) + " user[s] to delete..."
-            for user in delUsers:
-                response = self.client.deleteUser(user.username)
-                if response.status_code == 200:
-                    print user.username + " successfully deactivated..."
-                else:
-                    print response.error
-                    return False
+            if len(delUsers) > 0:
+                print str(len(delUsers)) + " user(s) to delete..."
+                for user in delUsers:
+                    if self.client.deleteUser(user.username):
+                        print user.username + " successfully deactivated..."
+                    else:
+                        print "Failed to delete " + user.username
+                        return False
+            else:
+                print "No users to delete"
 
         if not self.noUp:
             syncedUsers = self.getSyncedUsers(ldapUsers, lastPassUsers)
-            print str(len(syncedUsers)) + " user[s] to sync..."
+            print str(len(syncedUsers)) + " user(s) to sync..."
             lpUserDict = {}
             for lp in lastPassUsers:
                 lpUserDict[lp.username] = lp
@@ -104,12 +107,11 @@ class LastPassSyncer(object):
                     userPayload.append(payloadDict)
 
             if len(userPayload) > 0:
-                response = self.client.syncGroups(userPayload)
-                if response.status_code == 200:
-                    print str(len(userPayload)) + " user[s] successfully synced..."
+                if self.client.syncGroups(userPayload):
+                    print str(len(userPayload)) + " user(s) successfully synced..."
+                    return True
                 else:
-                    print response.error
-                    return False
+                    sys.exit("Syncing failed; exiting")
             else:
                 print "No users to sync..."
 

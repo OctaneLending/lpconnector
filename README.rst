@@ -24,11 +24,12 @@ Usage
 
 Client commands are as follows::
 
-    lpconnector sync [--users=UIDs | --groups=GIDs] [--no-add] [--no-delete] [--no-update]
-    lpconnector provision [--users=UIDS] [--password=PWD] [--reset-password=BOOL]
-    lpconnector getldapusers [--users=UIDS]
+    lpconnector sync [--users=UIDs | --groups=GCNs] [--no-add] [--no-delete] [--no-update] [--dry-run]
+    lpconnector provision [--users=UIDs | --groups=GCNs] [--password=PWD] [--reset-password=BOOL] [--dry-run]
+    lpconnector getldapusers [--users=UIDs | --groups=GCNs]
     lpconnector getlastpassusers [--email=EMAIL] [--disabled=BOOL] [--admin=BOOL]
-    lpconnector (-h | --help)
+    lpconnector getconfig
+    lpconnector  (-h | --help)
 
 Options
 -------
@@ -36,8 +37,9 @@ Options
 Details on command options are as follows::
     
     -h --help               Show help
-    --users=UIDs            Comma separated list of uids to provision/sync
-    --groups=GIDs           Comman seprated list of group names to provision/sync
+    --users=UIDs            Comma separated list of user uids to provision/sync
+    --groups=GCNs           Comma separated list of group common names to provision/sync
+    --dry-run               Print out API requests instead of sending
     --no-add                Don't add new users on sync
     --no-delete             Don't delete missing users on sync
     --no-update             Don't update a user's groups on sync

@@ -1,4 +1,5 @@
-import requests,sys
+import requests,sys,traceback
+from distutils.util import strtobool
 from .user import LastPassUser
 
 
@@ -7,7 +8,7 @@ class LastPassClient(object):
     url = "https://lastpass.com/enterpriseapi.php"
 
     def __init__(self, config):
-        self.dryRun = config.get('ARGS', 'dry-run')
+        self.dryRun = strtobool(config.get('ARGS', 'dry-run'))
         self.cid = config.get('LASTPASS', 'API_CID')
         self.user = config.get('LASTPASS', 'API_USER')
         self.key = config.get('LASTPASS', 'API_SECRET')
@@ -71,35 +72,36 @@ class LastPassClient(object):
         if self.dryRun:
             print payload
             return {}
-        response = requests.post(self.url, json=payload)
+        return self.makeRequest(self.url, payload)
+
+    def postData(self, payload):
+        if self.dryRun:
+            print payload
+            return True
+        result = self.makeRequest(self.url, payload)
+        return len(result) > 0
+
+    def makeRequest(self, url, payload):
+        response = requests.post(url, json=payload)
         try:
             jsonResponse = response.json()
             if 'status' in jsonResponse:
                 status = jsonResponse.get('status')
-                print status + ": " + jsonResponse.get('errors')
-                if status == 'FAIL':
-                    sys.exit('API connection failed; exiting.')
+                if status == 'OK':
+                    del jsonResponse['status']
+                    return jsonResponse
+                errors = ""
+                if 'error' in jsonResponse:
+                    errors = ", ".join(jsonResponse.get('error'))
+                elif 'errors' in jsonResponse:
+                    errors = ", ".join(jsonResponse.get('errors'))
+                else:
+                    errors = "No Errors"
+                print status + ": " + errors
                 return {}
             else:
                 return jsonResponse
         except Exception:
             sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
         return {}
-
-    def postData(self, payload):
-        if self.dryRun:
-            print payload
-            return True
-        response = requests.post(self.url, json=payload)
-        if 'json' in response.headers['Content-Type']:
-            jsonResponse = response.json()
-            status = jsonResponse.get('status')
-            if status != 'OK':
-                print status + ": " + jsonResponse.get('errors')
-                if status == 'FAIL':
-                    sys.exit('API connection failed; exiting.')
-                return False
-        elif 'xml' in response.headers['Content-Type']:
-            sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
-        return True
 
