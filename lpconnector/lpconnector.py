@@ -30,23 +30,26 @@ from .lastpass.sync import LastPassSyncer
 from .lastpass.provision import LastPassProvisioner
 
 
-def getConfig(args):
+def getConfig(args, verbose = False):
     config = ConfigParser.ConfigParser()
     config.read(os.path.join(os.path.abspath('lpconnector'), 'config/config.ini'))
     config.add_section('ARGS')
     for key, value in args.items():
         key = key[len('--'):] if key.startswith('--') else key
-        print "Setting config section ARGS with: " + key + " = " + str(value)
+        if verbose:
+            print "Setting config section ARGS with: " + key + " = " + str(value)
         config.set('ARGS', key, str(value))
     return config
 
 
 def main():
     args = docopt(__doc__)
-    config = getConfig(args)
 
     if args.get('getconfig'):
+        config = getConfig(args, True)
         print config.sections()
+
+    config = getConfig(args)
 
     if args.get('sync'):
         users = None

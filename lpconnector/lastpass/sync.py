@@ -44,9 +44,10 @@ class LastPassSyncer(object):
             print "Retrieved " + str(len(lastPassUsers)) + " LastPass Users..."
 
         self.server.unbindServer()
-        print ldapUsers
-        print lastPassUsers
-        self.sync(ldapUsers, lastPassUsers)
+        if self.sync(ldapUsers, lastPassUsers):
+            print "Syncing successful."
+        else:
+            print "Syncing failed."
         return
 
     def sync(self, ldapUsers, lastPassUsers):
@@ -57,7 +58,9 @@ class LastPassSyncer(object):
             if response.status_code == 200:
                 print str(len(newUsers)) + " user[s] successfully added..."
             else:
-                response.raise_for_status()
+                print response.error
+                return False
+
         if not self.noDel:
             delUsers = self.getDelUsers(ldapUsers, lastPassUsers)
             print str(len(delUsers)) + " user[s] to delete..."
@@ -66,16 +69,51 @@ class LastPassSyncer(object):
                 if response.status_code == 200:
                     print user.username + " successfully deactivated..."
                 else:
-                    response.raise_for_status()
+                    print response.error
+                    return False
+
         if not self.noUp:
             syncedUsers = self.getSyncedUsers(ldapUsers, lastPassUsers)
             print str(len(syncedUsers)) + " user[s] to sync..."
-            ldapUserDict = {}
-            for user in ldapUsers:
-                ldapUserDict['user.email'] = user
+            lpUserDict = {}
+            for lp in lastPassUsers:
+                lpUserDict[lp.username] = lp
 
+            userPayload = []
+            for user in syncedUsers:
+                update = False
+                payloadDict = {'username': user.email}
+                ldapGroups = user.groups
+                lpGroups = lpUserDict.get(user.email).groups
+                newGroups = []
+                delGroups = []
 
-        return
+                if lpGroups:
+                    newGroups = [x for x in ldapGroups if x not in lpGroups]
+                    delGroups = [y for y in lpGroups if y not in ldapGroups]
+                else:
+                    newGroups = ldapGroups
+
+                if len(newGroups) > 0:
+                    payloadDict['add'] = newGroups
+                    update = True
+                if len(delGroups) > 0:
+                    payloadDict['del'] = delGroups
+                    update = True
+                if update:
+                    userPayload.append(payloadDict)
+
+            if len(userPayload) > 0:
+                response = self.client.syncGroups(userPayload)
+                if response.status_code == 200:
+                    print str(len(userPayload)) + " user[s] successfully synced..."
+                else:
+                    print response.error
+                    return False
+            else:
+                print "No users to sync..."
+
+        return True
 
     def getNewUsers(self, ldapUsers, lastPassUsers):
         lastPassEmails = set(x.username for x in lastPassUsers)
