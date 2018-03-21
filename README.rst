@@ -16,7 +16,8 @@ Before installing the client run::
 
     $ mv lpconnector/config/config.ini.template lpconnector/conig/config.ini
 
-And then update the ``config.ini`` file with the proper paramters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key
+And then update the ``config.ini`` file with the proper paramters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key.
+Then setup and activate your virtual environment and run ``$ make install``.
 
 Usage
 -----
