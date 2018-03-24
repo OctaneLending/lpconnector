@@ -1,98 +1,105 @@
-import ldap,sys
+import sys
+import ldap
 from .user import LDAPUser
 from .group import LDAPGroup
 
 
 class LDAPServer(object):
 
-    def __init__(self, config):
-        self.server = config.get('LDAP', 'SERVER')
-        self.baseDN = config.get('LDAP', 'BASE_DN')
-        self.user = config.get('LDAP', 'BINDING_USER_UID')
-        self.pwd = config.get('LDAP', 'BINDING_USER_PWD')
-        self.ldapServer = None
+    def __init__(self, host, base_dn, user, pwd):
+        self.host = host
+        self.base_dn = base_dn
+        self.user = user
+        self.pwd = pwd
+        self.ldap_server = None
 
-    def bindToServer(self):
-        self.ldapServer = ldap.initialize(self.server)
+    def bind_server(self):
+        self.ldap_server = ldap.initialize(self.host)
 
-        bindDN = "uid=" + self.user + "," + self.baseDN
-        bindPW = self.pwd
+        bind_dn = "uid=" + self.user + "," + self.base_dn
+        bind_pw = self.pwd
         try:
-            self.ldapServer.protocol_version = ldap.VERSION3
-            self.ldapServer.simple_bind_s(bindDN, bindPW)
+            self.ldap_server.protocol_version = ldap.VERSION3
+            self.ldap_server.simple_bind_s(bind_dn, bind_pw)
         except ldap.LDAPError, error:
             print error
             sys.exit("LDAP Connection failed; exiting")
-        return self.ldapServer
+        return True
 
-    def getAllUsers(self):
-        searchFilter = "(&(objectClass=" + LDAPUser.objectClass + ")(!(memberOf=cn=Service Accounts," + self.baseDN + ")))"
+    def get_all_users(self):
+        search_filter = "(&(objectClass=" + LDAPUser.OBJECT_CLASS + ")"
+        search_filter += "(!(memberOf=cn=Service Accounts," + self.base_dn + ")))"
 
-        return self.doSearch(searchFilter, LDAPUser.objectClass)
+        return self.do_search(search_filter, LDAPUser.OBJECT_CLASS)
 
-    def getAllGroups(self):
-        searchFilter = "(&(objectClass=" + LDAPGroup.objectClass + "))"
+    def get_all_groups(self):
+        search_filter = "(&(objectClass=" + LDAPGroup.OBJECT_CLASS + "))"
 
-        return self.doSearch(searchFilter, LDAPGroup.objectClass)
+        return self.do_search(search_filter, LDAPGroup.OBJECT_CLASS)
 
-    def getUsersByUID(self, uids):
-        searchFilter = ""
+    def get_users_by_uid(self, uids):
+        search_filter = ""
         if not isinstance(uids, list):
-            searchFilter = "(uid=" + uids + ")"
+            search_filter = "(uid=" + uids + ")"
         else:
-            searchFilter += "(|"
+            search_filter += "(|"
             for uid in uids:
-                searchFilter += "(uid=" + uid + ")"
-            searchFilter += ")"
+                search_filter += "(uid=" + uid + ")"
+            search_filter += ")"
 
-        return self.doSearch(searchFilter, LDAPUser.objectClass)
+        return self.do_search(search_filter, LDAPUser.OBJECT_CLASS)
 
-    def getUsersByGroup(self, gids):
-        searchFilter = "(&(objectClass=" + LDAPUser.objectClass + ")"
-        if not isinstance(gids, list):
-            searchFilter += "(memberOf=cn=" + gids + "," + self.baseDN + ")"
+    def get_users_by_group(self, gcns):
+        search_filter = "(&(objectClass=" + LDAPUser.OBJECT_CLASS + ")"
+        if not isinstance(gcns, list):
+            search_filter += "(memberOf=cn=" + gcns + "," + self.base_dn + ")"
         else:
-            searchFilter += "(|"
-            for gid in gids:
-                searchFilter += "(memberOf=cn=" + gid + "," + self.baseDN + ")"
-            searchFilter += ")"
-        searchFilter += ")"
+            search_filter += "(|"
+            for gcn in gcns:
+                search_filter += "(memberOf=cn=" + gcn + "," + self.base_dn + ")"
+            search_filter += ")"
+        search_filter += ")"
 
-        return self.doSearch(searchFilter, LDAPUser.objectClass)
+        return self.do_search(search_filter, LDAPUser.OBJECT_CLASS)
 
-    def doSearch(self, sFilter, ldapObjClass):
-        sScope = ldap.SCOPE_SUBTREE
+    def do_search(self, search_filter, ldap_obj_class):
+        search_scope = ldap.SCOPE_SUBTREE
         result_set = []
 
-        if self.ldapServer is None:
+        if self.ldap_server is None:
             print "No server present, binding to default server"
-            self.bindToServer()
+            self.bind_server()
 
-        if ldapObjClass == LDAPUser.objectClass:
-            sAttributes = LDAPUser.attributes
-        elif ldapObjClass == LDAPGroup.objectClass:
-            sAttributes = LDAPGroup.attributes
+        if ldap_obj_class == LDAPUser.OBJECT_CLASS:
+            search_attributes = LDAPUser.ATTRIBUTES
+        elif ldap_obj_class == LDAPGroup.OBJECT_CLASS:
+            search_attributes = LDAPGroup.ATTRIBUTES
         else:
             print "Invalid search type, must be a user or a group"
             return result_set
 
         try:
-            result_id = self.ldapServer.search(self.baseDN, sScope, sFilter, sAttributes)
+            result_id = self.ldap_server.search(
+                self.base_dn,
+                search_scope,
+                search_filter,
+                search_attributes
+            )
             while 1:
-                result_type, result_data = self.ldapServer.result(result_id, 0)
+                result_type, result_data = self.ldap_server.result(result_id, 0)
                 if result_data == []:
                     break
                 else:
                     if result_type == ldap.RES_SEARCH_ENTRY:
-                        if ldapObjClass == LDAPUser.objectClass:
+                        if ldap_obj_class == LDAPUser.OBJECT_CLASS:
                             result_set.append(LDAPUser(**result_data[0][1]))
-                        elif ldapObjClass == LDAPGroup.objectClass:
+                        elif ldap_obj_class == LDAPGroup.OBJECT_CLASS:
                             result_set.append(LDAPGroup(**result_data[0][1]))
         except ldap.LDAPError, error:
             print error
             sys.exit("LDAP Connection failed; exiting")
         return result_set
 
-    def unbindServer(self):
-        self.ldapServer.unbind_s()
-        self.ldapServer = None
+    def unbind_server(self):
+        self.ldap_server.unbind_s()
+        self.ldap_server = None
