@@ -1,5 +1,4 @@
 from .basecommand import BaseCommand
-from ..lastpass.client import LastPassClient
 
 
 class LastPassUsers(BaseCommand):
@@ -19,13 +18,7 @@ class LastPassUsers(BaseCommand):
     """
 
     def execute(self):
-        lp_client = LastPassClient(
-            cid=self.config.get('LASTPASS', 'API_CID'),
-            user=self.config.get('LASTPASS', 'API_USER'),
-            key=self.config.get('LASTPASS', 'API_SECRET'),
-            dry_run=self.args.get('--dry-run')
-        )
-        users = lp_client.get_user_data(
+        users = self.lp_client.get_user_data(
             user=self.args.get('--email'),
             disabled=self.args.get('--disabled'),
             admin=self.args.get('--admin')

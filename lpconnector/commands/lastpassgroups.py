@@ -1,5 +1,4 @@
 from .basecommand import BaseCommand
-from ..lastpass.client import LastPassClient
 
 
 class LastPassGroups(BaseCommand):
@@ -16,13 +15,7 @@ class LastPassGroups(BaseCommand):
     """
 
     def execute(self):
-        lp_client = LastPassClient(
-            cid=self.config.get('LASTPASS', 'API_CID'),
-            user=self.config.get('LASTPASS', 'API_USER'),
-            key=self.config.get('LASTPASS', 'API_SECRET'),
-            dry_run=self.args.get('--dry-run')
-        )
-        groups = lp_client.get_group_data()
+        groups = self.lp_client.get_group_data()
         for group in groups:
             print group.__dict__
         return True

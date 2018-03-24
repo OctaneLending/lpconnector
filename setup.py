@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name="lpconnector",
-    version="0.1.0",
+    version="0.2.0",
     url="https://www.github.com/OctaneLending/lastpass-ldap-syc",
     author="Joshua Marcus-Hixson",
     author_email="josh@octanelending.com",
@@ -24,7 +24,7 @@ setup(
     long_description=read('README.rst'),
     entry_points={
         'console_scripts': [
-            'lpconnector=lpconnector.lpconnector:main',
+            'lpconnector=lpconnector.__main__:main',
         ],
     },
 )

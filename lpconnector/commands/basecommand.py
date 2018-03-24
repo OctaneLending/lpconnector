@@ -1,7 +1,9 @@
 from docopt import docopt
+from ..ldap.server import LDAPServer
+from ..lastpass.client import LastPassClient
 
 
-class BaseCommand:
+class BaseCommand(object):
     """Base class for commands"""
 
     # map command names to classes in the commands modules
@@ -43,6 +45,20 @@ class BaseCommand:
         else:
             self.args = docopt(self.__doc__)
         self.verbose = self.args.get('--verbose')
+
+        self.ldap_server = LDAPServer(
+            host=self.config.get('LDAP', 'SERVER'),
+            base_dn=self.config.get('LDAP', 'BASE_DN'),
+            user=self.config.get('LDAP', 'BINDING_USER_UID'),
+            pwd=self.config.get('LDAP', 'BINDING_USER_PWD')
+        )
+
+        self.lp_client = LastPassClient(
+            cid=self.config.get('LASTPASS', 'API_CID'),
+            user=self.config.get('LASTPASS', 'API_USER'),
+            key=self.config.get('LASTPASS', 'API_SECRET'),
+            dry_run=self.args.get('--dry-run')
+        )
 
     def execute(self):
         raise NotImplementedError
