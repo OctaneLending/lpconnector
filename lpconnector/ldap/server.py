@@ -87,7 +87,7 @@ class LDAPServer(object):
             )
             while 1:
                 result_type, result_data = self.ldap_server.result(result_id, 0)
-                if result_data == []:
+                if not result_data:
                     break
                 else:
                     if result_type == ldap.RES_SEARCH_ENTRY:

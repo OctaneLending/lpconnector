@@ -62,4 +62,3 @@ class BaseCommand(object):
 
     def execute(self):
         raise NotImplementedError
-

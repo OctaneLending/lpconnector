@@ -1,16 +1,15 @@
 from .basecommand import BaseCommand
-from ..ldap.server import LDAPServer
 
 
 class LDAPGroups(BaseCommand):
     """
     Display groups in LDAP
-    
+
     Usage:
         ldapgroups [options]
 
         -v --verbose            Print verbose output
-    
+
     """
 
     def execute(self):

@@ -12,10 +12,10 @@ class LDAPUser(object):
         self.email = kwargs.get('mail')[0]
         self.name = kwargs.get('cn')[0]
         group_list = []
-        for dn in kwargs.get('memberOf'):
-            cn = re.match("cn=(.*),ou", dn)
-            if cn:
-                group_list.append(cn.group(1))
+        for group_dn in kwargs.get('memberOf'):
+            group_cn = re.match("cn=(.*),ou", group_dn)
+            if group_cn:
+                group_list.append(group_cn.group(1))
         self.groups = group_list
 
     def get_lastpass_user(self):

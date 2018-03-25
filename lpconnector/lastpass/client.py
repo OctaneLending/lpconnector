@@ -17,7 +17,7 @@ class LastPassClient(object):
     CMD_DELETE_USER = "deluser"
     CMD_SYNC_GROUPS = "batchchangegrp"
 
-    def __init__(self, cid, user, key, dry_run, url = None):
+    def __init__(self, cid, user, key, dry_run, url=None):
         self.url = url if url is not None else LastPassClient.DEFAULT_ENDPOINT
         self.dry_run = dry_run
         self.cid = cid
@@ -67,8 +67,8 @@ class LastPassClient(object):
             data_payload=data_payload
         )
         if response:
-            for user in response.get('Users').values():
-                users.append(LastPassUser(**user))
+            for lp_user in response.get('Users').values():
+                users.append(LastPassUser(**lp_user))
         return users
 
     def get_group_data(self):
@@ -106,27 +106,25 @@ class LastPassClient(object):
         result = self.make_request(self.url, payload)
         return len(result) > 0
 
-    def make_request(self, url, payload):
+    @staticmethod
+    def make_request(url, payload):
         response = requests.post(url, json=payload)
         try:
             json_response = response.json()
             if 'status' in json_response:
                 status = json_response.get('status')
+                errors = "No Errors"
                 if status == 'OK':
                     del json_response['status']
                     return json_response
-                errors = ""
                 if 'error' in json_response:
                     errors = ", ".join(json_response.get('error'))
                 elif 'errors' in json_response:
                     errors = ", ".join(json_response.get('errors'))
-                else:
-                    errors = "No Errors"
                 print status + ": " + errors
                 return {}
-            else:
-                return json_response
-        except Exception:
-            sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
-        return {}
 
+        except Exception:
+            raise AuthorizationError(Exception)
+            sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
+        return json_response

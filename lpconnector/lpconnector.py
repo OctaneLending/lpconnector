@@ -1,8 +1,8 @@
 import os
 import ConfigParser
-from docopt import docopt
-from subprocess import call
 from importlib import import_module
+from subprocess import call
+from docopt import docopt
 from . import __version__
 from .commands.basecommand import BaseCommand
 
@@ -28,7 +28,7 @@ class LPConnector(object):
         lastpassgroups  Return LastPass groups
         config          Display configuration settings
 
-    See `lpconnector help <comnmand>` for more information on a specific command
+    See `lpconnector help <command>` for more information on a specific command
 
     """
 
@@ -65,13 +65,13 @@ class LPConnector(object):
 
         exit("Command: " + command_name + "; Complete.")
 
-    def get_command_class(self, command_name):
+    @staticmethod
+    def get_command_class(command_name):
         module_name = '.commands.%s' % command_name
         module = import_module(module_name, 'lpconnector')
         try:
             command_class = getattr(module, BaseCommand.COMMAND_MAP.get(command_name).get('class'))
         except AttributeError:
             print 'Command module not found'
-            return
+            return None
         return command_class
-

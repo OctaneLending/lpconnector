@@ -1,4 +1,3 @@
-from distutils.util import strtobool
 from .basecommand import BaseCommand
 
 
@@ -44,4 +43,3 @@ class Provision(BaseCommand):
         else:
             exit("Provisioning failed; exiting")
         return True
-

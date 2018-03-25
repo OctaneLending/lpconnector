@@ -9,8 +9,8 @@ class LDAPGroup(object):
     def __init__(self, **kwargs):
         self.name = kwargs.get('cn')
         member_list = []
-        for dn in kwargs.get('member'):
-            uid = re.match("uid=(\w*),ou", dn)
+        for user_dn in kwargs.get('member'):
+            uid = re.match(r"uid=(\w*),ou", user_dn)
             if uid:
                 member_list.append(uid.group(1))
         self.members = member_list

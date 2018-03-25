@@ -17,6 +17,8 @@ class LDAPUsers(BaseCommand):
     def execute(self):
         self.ldap_server.bind_server()
 
+        result = []
+
         if self.args.get('--users') is None and self.args.get('--groups') is None:
             result = self.ldap_server.get_all_users()
         if self.args.get('--users') is not None:
