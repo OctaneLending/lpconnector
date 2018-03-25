@@ -10,8 +10,8 @@ class LastPassUsers(BaseCommand):
 
         -n --dry-run            Display API requests instead of sending them
         -v --verbose            Print verbose output  # default True if dry-run enabled
-        -u URL --url=URL        Specify API endpoint URL
-        -e EMAIL --email=EMAIL   Get a single user by their email address
+        --url=URL               Specify API endpoint URL
+        --email=EMAIL           Get a single user by their email address
         --disabled              Get only disabled users
         --admin                 Get only admin users
 

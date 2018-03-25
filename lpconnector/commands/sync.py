@@ -5,12 +5,14 @@ class Sync(BaseCommand):
 
     """
     Usage:
-        sync [--users=UIDs | --groups=GCNs] [--no-add] [--no-delete] [--no-update] [--dry-run] [--verbose]
+        sync [--users=UIDs | --groups=GCNs] [--url=URL] [--no-add] [--no-delete] [--no-update] [--dry-run] [--verbose]
+
 
         -n --dry-run            Display API requests instead of sending them
         -v --verbose            Print verbose output  # default True if dry-run enabled
         -u UIDS --users=UIDs    Comma separated list of user uids to provision/sync
         -g GCNs --groups=GCNs   Comma separated list of group common names to provision/sync  # quote names with spaces
+        --url=URL               Specify API endpoint URL
         --no-add                Don't add new users on sync
         --no-delete             Don't delete missing users on sync
         --no-update             Don't update a user's groups on sync
@@ -52,67 +54,80 @@ class Sync(BaseCommand):
 
     def sync(self):
         if not self.args.get('--no-add'):
-            new_users = self.get_new_users()
-            if not new_users:
-                print str(len(new_users)) + " user(s) to add..."
-                if self.lp_client.batch_add(new_users):
-                    print str(len(new_users)) + " user(s) successfully added..."
-                else:
-                    print "Failed to add users"
-                    return False
-            else:
-                print "No users to add"
+            self.add_new_users()
 
         if not self.args.get('--no-delete'):
-            del_users = self.get_del_users()
-            if not del_users:
-                print str(len(del_users)) + " user(s) to delete..."
-                for user in del_users:
-                    if self.lp_client.delete_user(user.username):
-                        print user.username + " successfully deactivated..."
-                    else:
-                        print "Failed to delete " + user.username
-                        return False
-            else:
-                print "No users to delete"
+            self.del_old_users()
 
         if not self.args.get('--no-update'):
-            synced_users = self.get_synced_users()
-            print str(len(synced_users)) + " user(s) to sync..."
-            lp_user_dict = {}
-            for lp_user in self.lastpass_users:
-                lp_user_dict[lp_user.username] = lp_user
+            self.sync_user_groups()
 
-            user_payload = []
-            for user in synced_users:
-                update = False
-                payload_dict = {'username': user.email}
-                ldap_groups = user.groups
-                lp_groups = lp_user_dict.get(user.email).groups
-                new_groups = ldap_groups
-                del_groups = []
+        return True
 
-                if lp_groups:
-                    new_groups = [x for x in ldap_groups if x not in lp_groups]
-                    del_groups = [y for y in lp_groups if y not in ldap_groups]
-
-                if not new_groups:
-                    payload_dict['add'] = new_groups
-                    update = True
-                if not del_groups:
-                    payload_dict['del'] = del_groups
-                    update = True
-                if update:
-                    user_payload.append(payload_dict)
-
-            if not user_payload:
-                if self.lp_client.sync_groups(user_payload):
-                    print str(len(user_payload)) + " user(s) successfully synced..."
-                    return True
-                else:
-                    exit("Syncing failed; exiting")
+    def add_new_users(self):
+        new_users = self.get_new_users()
+        if not new_users:
+            print str(len(new_users)) + " user(s) to add..."
+            if self.lp_client.batch_add(new_users):
+                print str(len(new_users)) + " user(s) successfully added..."
             else:
-                print "All users up to date..."
+                print "Failed to add users"
+                return False
+        else:
+            print "No users to add"
+        return True
+
+    def del_old_users(self):
+        del_users = self.get_del_users()
+        if not del_users:
+            print str(len(del_users)) + " user(s) to delete..."
+            for user in del_users:
+                if self.lp_client.delete_user(user.username):
+                    print user.username + " successfully deactivated..."
+                else:
+                    print "Failed to delete " + user.username
+                    return False
+        else:
+            print "No users to delete"
+        return True
+
+    def sync_user_groups(self):
+        synced_users = self.get_synced_users()
+        print str(len(synced_users)) + " user(s) to sync..."
+        lp_user_dict = {}
+        for lp_user in self.lastpass_users:
+            lp_user_dict[lp_user.username] = lp_user
+
+        user_payload = []
+        for user in synced_users:
+            update = False
+            payload_dict = {'username': user.email}
+            ldap_groups = user.groups
+            lp_groups = lp_user_dict.get(user.email).groups
+            new_groups = ldap_groups
+            del_groups = []
+
+            if lp_groups:
+                new_groups = [x for x in ldap_groups if x not in lp_groups]
+                del_groups = [y for y in lp_groups if y not in ldap_groups]
+
+            if not new_groups:
+                payload_dict['add'] = new_groups
+                update = True
+            if not del_groups:
+                payload_dict['del'] = del_groups
+                update = True
+            if update:
+                user_payload.append(payload_dict)
+
+        if not user_payload:
+            if self.lp_client.sync_groups(user_payload):
+                print str(len(user_payload)) + " user(s) successfully synced..."
+                return True
+            else:
+                exit("Syncing failed; exiting")
+        else:
+            print "All users up to date..."
 
         return True
 

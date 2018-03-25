@@ -1,4 +1,3 @@
-import sys
 import requests
 from .user import LastPassUser
 from .group import LastPassGroup
@@ -18,7 +17,7 @@ class LastPassClient(object):
     CMD_SYNC_GROUPS = "batchchangegrp"
 
     def __init__(self, cid, user, key, dry_run, url=None):
-        self.url = url if url is not None else LastPassClient.DEFAULT_ENDPOINT
+        self.url = url
         self.dry_run = dry_run
         self.cid = cid
         self.user = user
@@ -125,6 +124,6 @@ class LastPassClient(object):
                 return {}
 
         except Exception:
+            print "FAIL: Authorization Error; API Connection failed; exiting"
             raise AuthorizationError(Exception)
-            sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
         return json_response

@@ -10,7 +10,7 @@ class LastPassGroups(BaseCommand):
 
         -n --dry-run            Display API requests instead of sending them
         -v --verbose            Print verbose output  # default True if dry-run enabled
-        -u URL --url=URL        Specify API endpoint URL
+        --url=URL               Specify API endpoint URL
 
     """
 
