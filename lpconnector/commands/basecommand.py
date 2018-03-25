@@ -47,18 +47,14 @@ class BaseCommand(object):
         self.verbose = self.args.get('--verbose')
 
         self.ldap_server = LDAPServer(
-            host=self.config.get('LDAP', 'SERVER'),
-            base_dn=self.config.get('LDAP', 'BASE_DN'),
-            user=self.config.get('LDAP', 'BINDING_USER_UID'),
-            pwd=self.config.get('LDAP', 'BINDING_USER_PWD')
+            config=self.config.items('LDAP')
         )
+
         url = self.args.get('--url')
         self.lp_client = LastPassClient(
-            cid=self.config.get('LASTPASS', 'API_CID'),
-            user=self.config.get('LASTPASS', 'API_USER'),
-            key=self.config.get('LASTPASS', 'API_SECRET'),
             dry_run=self.args.get('--dry-run'),
-            url=url if url is not None else LastPassClient.DEFAULT_ENDPOINT
+            url=url if url is not None else LastPassClient.DEFAULT_ENDPOINT,
+            config=self.config.items('LASTPASS')
         )
 
     def execute(self):

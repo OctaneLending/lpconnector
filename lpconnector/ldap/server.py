@@ -6,11 +6,12 @@ from .group import LDAPGroup
 
 class LDAPServer(object):
 
-    def __init__(self, host, base_dn, user, pwd):
-        self.host = host
-        self.base_dn = base_dn
-        self.user = user
-        self.pwd = pwd
+    def __init__(self, **kwargs):
+        config = dict(kwargs.get('config'))
+        self.host = config.get('server')
+        self.base_dn = config.get('base_dn')
+        self.user = config.get('binding_user_uid')
+        self.pwd = config.get('binding_user_pwd')
         self.ldap_server = None
 
     def bind_server(self):

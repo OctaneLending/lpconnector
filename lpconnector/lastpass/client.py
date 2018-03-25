@@ -16,12 +16,13 @@ class LastPassClient(object):
     CMD_DELETE_USER = "deluser"
     CMD_SYNC_GROUPS = "batchchangegrp"
 
-    def __init__(self, cid, user, key, dry_run, url=None):
-        self.url = url
+    def __init__(self, dry_run, url, **kwargs):
+        config = dict(kwargs.get('config'))
         self.dry_run = dry_run
-        self.cid = cid
-        self.user = user
-        self.key = key
+        self.url = url
+        self.cid = config.get('api_cid')
+        self.user = config.get('api_user')
+        self.key = config.get('api_secret')
 
     def build_payload(self, command, data=None):
         payload = {
