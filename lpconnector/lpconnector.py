@@ -3,6 +3,7 @@ import ConfigParser
 from docopt import docopt
 from subprocess import call
 from importlib import import_module
+from . import __version__
 from .commands.basecommand import BaseCommand
 
 
@@ -32,7 +33,8 @@ class LPConnector(object):
     """
 
     def __init__(self):
-        self.args = docopt(self.__doc__, version='lpconnector v0.2.0', options_first=True)
+        version = "lpconnector v" + __version__
+        self.args = docopt(self.__doc__, version=version, options_first=True)
         self.config = self.get_config()
 
     def get_config(self):
@@ -61,7 +63,7 @@ class LPConnector(object):
         else:
             exit("%r is not a valid command. See `lpconnector help`." % command_name)
 
-        return
+        exit("Command: " + command_name + "; Complete.")
 
     def get_command_class(self, command_name):
         module_name = '.commands.%s' % command_name

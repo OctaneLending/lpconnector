@@ -24,35 +24,26 @@ class LastPassClient(object):
         self.user = user
         self.key = key
 
-    def build_payload(self, command, data=None, **kwargs):
-        data_payload = {}
-
-        if data:
-            data_payload.update(data)
-
-        if kwargs:
-            data_payload.update(kwargs)
-
-        base_payload = {
+    def build_payload(self, command, data=None):
+        payload = {
             "cid": self.cid,
             "provhash": self.key,
             "apiuser": self.user,
             "cmd": command,
         }
+        if data is not None:
+            payload.update(data=data)
 
-        if len(data_payload) > 0:
-            base_payload.update(data=data_payload)
+        return payload
 
-        return base_payload
-
-    def batch_add(self, users, default_pwd = None, pwd_reset = None):
+    def batch_add(self, users, default_pwd=None, pwd_reset=None):
         user_data = []
 
         for user in users:
-            user_payload = user.getLastPassUser().__dict__
+            user_payload = user.get_lastpass_user().__dict__
 
             if default_pwd is not None:
-                user_payload['password'] = defaultpwd
+                user_payload['password'] = default_pwd
                 if pwd_reset is not None:
                     user_payload['password_reset_required'] = pwd_reset
 
@@ -88,19 +79,17 @@ class LastPassClient(object):
                 groups.append(LastPassGroup(name=group, users=users))
         return groups
 
-    def delete_user(self, user, action = 0):
-        cmd = "deluser"
-        payload = self.basePayload
-        payload['cmd'] = cmd
-        payload['data'] = {"username": user, "deleteaction": action}
-        return self.postData(payload)
+    def delete_user(self, user, action=0):
+        return self.post_data(
+            command=LastPassClient.CMD_DELETE_USER,
+            data_payload={'username': user, 'deleteaction': action}
+        )
 
-    def sync_groups(self, userPayload):
-        cmd = "batchchangegrp"
-        payload = self.basePayload
-        payload['cmd'] = cmd
-        payload['data'] = userPayload
-        return self.postData(payload)
+    def sync_groups(self, user_payload):
+        return self.post_data(
+            command=LastPassClient.CMD_SYNC_GROUPS,
+            data_payload=user_payload
+        )
 
     def get_data(self, command, data_payload=None):
         payload = self.build_payload(command, data_payload)
@@ -109,33 +98,34 @@ class LastPassClient(object):
             return {}
         return self.make_request(self.url, payload)
 
-    def post_data(self, data_payload=None):
-        if self.dryRun:
+    def post_data(self, command, data_payload=None):
+        payload = self.build_payload(command, data_payload)
+        if self.dry_run:
             print payload
             return True
-        result = self.makeRequest(self.url, payload)
+        result = self.make_request(self.url, payload)
         return len(result) > 0
 
     def make_request(self, url, payload):
         response = requests.post(url, json=payload)
         try:
-            jsonResponse = response.json()
-            if 'status' in jsonResponse:
-                status = jsonResponse.get('status')
+            json_response = response.json()
+            if 'status' in json_response:
+                status = json_response.get('status')
                 if status == 'OK':
-                    del jsonResponse['status']
-                    return jsonResponse
+                    del json_response['status']
+                    return json_response
                 errors = ""
-                if 'error' in jsonResponse:
-                    errors = ", ".join(jsonResponse.get('error'))
-                elif 'errors' in jsonResponse:
-                    errors = ", ".join(jsonResponse.get('errors'))
+                if 'error' in json_response:
+                    errors = ", ".join(json_response.get('error'))
+                elif 'errors' in json_response:
+                    errors = ", ".join(json_response.get('errors'))
                 else:
                     errors = "No Errors"
                 print status + ": " + errors
                 return {}
             else:
-                return jsonResponse
+                return json_response
         except Exception:
             sys.exit("FAIL: Authorization Error; API Connection failed; exiting")
         return {}

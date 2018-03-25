@@ -5,8 +5,10 @@ class Sync(BaseCommand):
 
     """
     Usage:
-        sync [--users=UIDs | --groups=GCNs] [--no-add] [--no-delete] [--no-update]
+        sync [--users=UIDs | --groups=GCNs] [--no-add] [--no-delete] [--no-update] [--dry-run] [--verbose]
 
+        -n --dry-run            Display API requests instead of sending them
+        -v --verbose            Print verbose output  # default True if dry-run enabled
         -u UIDS --users=UIDs    Comma separated list of user uids to provision/sync
         -g GCNs --groups=GCNs   Comma separated list of group common names to provision/sync  # quote names with spaces
         --no-add                Don't add new users on sync
@@ -29,7 +31,7 @@ class Sync(BaseCommand):
             if self.args.get('--users') is not None:
                 users = self.args.get('--users').split(',')
                 print "Syncing " + str(len(users)) + " user(s)..."
-                ldap_users = self.ldap_server.getUsersByUID(users)
+                ldap_users = self.ldap_server.get_users_by_uid(users)
             if self.args.get('--groups') is not None:
                 groups = self.args.get('--groups').split(',')
                 print "Syncing " + str(len(groups)) + " group(s)..."
@@ -110,7 +112,7 @@ class Sync(BaseCommand):
                 else:
                     exit("Syncing failed; exiting")
             else:
-                print "No users to sync..."
+                print "All users up to date..."
 
         return True
 

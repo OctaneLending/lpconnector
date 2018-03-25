@@ -1,1 +1,1 @@
-from .lpconnector import LPConnector
+__version__ ='0.2.1'

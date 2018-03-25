@@ -2,7 +2,7 @@ certifi==2018.1.18
 chardet==3.0.4
 docopt==0.6.2
 idna==2.6
-lpconnector==0.1.0
+lpconnector>=0.1.0
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
 python-ldap==3.0.0

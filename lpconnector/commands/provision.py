@@ -6,8 +6,10 @@ class Provision(BaseCommand):
 
     """
     Usage:
-        provision [--users=UIDs | --groups=GCNs] [--password=PWD] [--no-reset-password]
+        provision [--users=UIDs | --groups=GCNs] [--password=PWD] [--no-reset-password] [--dry-run] [--verbose]
 
+        -n --dry-run            Display API requests instead of sending them
+        -v --verbose            Print verbose output  # default True if dry-run enabled
         -u UIDS --users=UIDs    Comma separated list of user uids to provision/sync
         -g GCNs --groups=GCNs   Comma separated list of group common names to provision/sync  # quote names with spaces
         -p PWD --password=PWD   Default password for provisioned users
@@ -36,7 +38,7 @@ class Provision(BaseCommand):
         self.ldap_server.unbind_server()
 
         password = self.args.get('--password')
-        no_reset = strtobool(self.args.get('--no-reset-password'))
+        no_reset = self.args.get('--no-reset-password')
         if self.lp_client.batch_add(new_users, password, no_reset):
             print str(len(new_users)) + " user(s) successfully provisioned."
         else:

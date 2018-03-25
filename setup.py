@@ -1,4 +1,5 @@
 import os
+import lpconnector
 from setuptools import setup, find_packages
 
 
@@ -8,7 +9,7 @@ def read(fname):
 
 setup(
     name="lpconnector",
-    version="0.2.0",
+    version=lpconnector.__version__,
     url="https://www.github.com/OctaneLending/lastpass-ldap-syc",
     author="Joshua Marcus-Hixson",
     author_email="josh@octanelending.com",
