@@ -1,7 +1,7 @@
 from .basecommand import BaseCommand
 
 
-class Sync(BaseCommand):
+class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
 
     """
     Usage:
@@ -21,7 +21,7 @@ class Sync(BaseCommand):
 
     def __init__(self, command, command_args):
         super(Sync, self).__init__(command, command_args)
-        self.ldap_server.bind_server()
+        self.bind_ldap()
         self.ldap_users = []
         self.lastpass_users = []
 
@@ -47,7 +47,7 @@ class Sync(BaseCommand):
                 lp_user = self.lp_client.get_user_data(email)
                 if lp_user:
                     self.lastpass_users.append(lp_user[0])
-        self.ldap_server.unbind_server()
+        self.unbind_ldap()
         print "Retrieved " + str(len(self.lastpass_users)) + " LastPass Users..."
 
         return self.sync()

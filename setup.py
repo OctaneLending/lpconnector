@@ -19,6 +19,7 @@ setup(
         'python-ldap==3.0.0',
         'requests==2.18.4',
         'docopt==0.6.2',
+        'pylint==1.8.3'
     ],
     packages=find_packages(exclude=['docs', 'tests']),
     package_data={'lpconnector': ['config/*.ini']},

@@ -1,7 +1,7 @@
 from .basecommand import BaseCommand
 
 
-class Provision(BaseCommand):
+class Provision(BaseCommand):   # pylint: disable=too-few-public-methods
 
     """
     Usage:
@@ -20,7 +20,7 @@ class Provision(BaseCommand):
     """
 
     def execute(self):
-        self.ldap_server.bind_server()
+        self.bind_ldap()
 
         new_users = []
         if self.args.get('--users') is None and self.args.get('--groups') is None:
@@ -37,7 +37,7 @@ class Provision(BaseCommand):
             new_users = self.ldap_server.get_users_by_group(groups)
 
         print "Retrieved " + str(len(new_users)) + " to user(s) provision..."
-        self.ldap_server.unbind_server()
+        self.unbind_ldap()
 
         password = self.args.get('--password')
         no_reset = self.args.get('--no-reset-password')

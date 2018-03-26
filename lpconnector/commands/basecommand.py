@@ -58,5 +58,11 @@ class BaseCommand(object):
             config=self.config.lastpass()
         )
 
+    def bind_ldap(self):
+        self.ldap_server.bind_server()
+
+    def unbind_ldap(self):
+        self.ldap_server.unbind_server()
+
     def execute(self):
         raise NotImplementedError

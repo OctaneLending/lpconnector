@@ -1,20 +1,28 @@
 import re
+from ..base.user import BaseUser
 from ..config.config import Config
 
 
 class LDAPObject(object):
-    def __init__(self, **kwargs):
+    def __init__(self):
         config = Config()
         self.base_dn = config.ldap('BASE_DN')
 
+    def as_dict(self):
+        del self.base_dn
+        return self.__dict__
 
-class LDAPUser(LDAPObject):
+    def get_dn(self):
+        raise NotImplementedError
+
+
+class LDAPUser(LDAPObject, BaseUser):
 
     OBJECT_CLASS = "inetOrgPerson"
     ATTRIBUTES = ["uid", "mail", "cn", "memberOf"]
 
     def __init__(self, **kwargs):
-        super(LDAPUser, self).__init__(**kwargs)
+        super(LDAPUser, self).__init__()
         self.uid = kwargs.get('uid')[0]
         self.email = kwargs.get('mail')[0]
         self.name = kwargs.get('cn')[0]
@@ -25,20 +33,14 @@ class LDAPUser(LDAPObject):
                 group_list.append(group_cn.group(1))
         self.groups = group_list
 
+    def get_uid(self):
+        return self.uid
+
+    def get_email(self):
+        return self.email
+
     def get_dn(self):
         return "uid=" + self.uid + "," + self.base_dn
-
-    def is_group_member(self, group):
-        if isinstance(group, basestring):
-            return group in self.groups
-
-        if isinstance(group, object):
-            try:
-                return group.name in self.groups
-            except AttributeError:
-                return False
-
-        return False
 
 
 class LDAPGroup(LDAPObject):
@@ -47,7 +49,7 @@ class LDAPGroup(LDAPObject):
     ATTRIBUTES = ["cn", "member"]
 
     def __init__(self, **kwargs):
-        super(LDAPGroup, self).__init__(**kwargs)
+        super(LDAPGroup, self).__init__()
         self.name = kwargs.get('cn')
         member_list = []
         for user_dn in kwargs.get('member'):
@@ -55,24 +57,18 @@ class LDAPGroup(LDAPObject):
             if uid:
                 member_list.append(uid.group(1))
         self.members = member_list
-        self.member_count = len(self.members)
 
     def get_dn(self):
         return "cn=" + self.name + "," + self.base_dn
+
+    def get_count(self):
+        return len(self.members)
 
     def is_member(self, user):
         if isinstance(user, basestring):
             return user in self.members
 
-        if isinstance(user, object):
-            try:
-                return user.uid in self.members
-            except AttributeError:
-                pass
-
-            try:
-                return user.get_uid() in self.members
-            except AttributeError:
-                pass
+        if isinstance(user, BaseUser):
+            return user.get_uid() in self.members
 
         return False

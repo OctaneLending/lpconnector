@@ -2,7 +2,7 @@ import os
 import ConfigParser
 
 
-class Config():
+class Config(object):
 
     def __init__(self, config_path=None):
         if config_path is None:

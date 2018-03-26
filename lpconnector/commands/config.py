@@ -1,7 +1,7 @@
 from .basecommand import BaseCommand
 
 
-class Config(BaseCommand):
+class Config(BaseCommand):  # pylint: disable=too-few-public-methods
     """
     Display configuration settings
 

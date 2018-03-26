@@ -1,7 +1,7 @@
 from .basecommand import BaseCommand
 
 
-class LDAPGroups(BaseCommand):
+class LDAPGroups(BaseCommand):  # pylint: disable=too-few-public-methods
     """
     Display groups in LDAP
 
@@ -13,9 +13,9 @@ class LDAPGroups(BaseCommand):
     """
 
     def execute(self):
-        self.ldap_server.bind_server()
+        self.bind_ldap()
         groups = self.ldap_server.get_all_groups()
-        self.ldap_server.unbind_server()
+        self.unbind_ldap()
         for group in groups:
-            print group.__dict__
+            print group.as_dict()
         return True

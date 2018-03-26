@@ -1,7 +1,7 @@
 from .basecommand import BaseCommand
 
 
-class LastPassGroups(BaseCommand):
+class LastPassGroups(BaseCommand):  # pylint: disable=too-few-public-methods
     """
     Display groups in LastPass
 

@@ -1,7 +1,7 @@
 from .basecommand import BaseCommand
 
 
-class LastPassUsers(BaseCommand):
+class LastPassUsers(BaseCommand):   # pylint: disable=too-few-public-methods
     """
     Get users in LastPass
 

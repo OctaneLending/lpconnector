@@ -1,7 +1,7 @@
 from .basecommand import BaseCommand
 
 
-class LDAPUsers(BaseCommand):
+class LDAPUsers(BaseCommand):   # pylint: disable=too-few-public-methods
     """
     Display users in remote directory
 
@@ -15,7 +15,7 @@ class LDAPUsers(BaseCommand):
     """
 
     def execute(self):
-        self.ldap_server.bind_server()
+        self.bind_ldap()
 
         result = []
 
@@ -30,7 +30,7 @@ class LDAPUsers(BaseCommand):
 
         print "Retrieving " + str(len(result)) + " user(s) from the directory..."
 
-        self.ldap_server.unbind_server()
+        self.unbind_ldap()
         for ldap_user in result:
-            print ldap_user.__dict__
+            print ldap_user.as_dict()
         return True

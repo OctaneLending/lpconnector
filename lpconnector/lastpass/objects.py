@@ -1,6 +1,10 @@
-class LastPassUser(object):
+from ..base.user import BaseUser
+
+
+class LastPassUser(BaseUser):
 
     def __init__(self, **kwargs):
+        super(LastPassUser, self).__init__()
         self.username = kwargs.get('username')
         self.fullname = kwargs.get('fullname')
         self.groups = kwargs.get('groups')
@@ -9,17 +13,8 @@ class LastPassUser(object):
     def get_uid(self):
         return self.attribs.get('uid')
 
-    def is_group_member(self, group):
-        if isinstance(group, basestring):
-            return group in self.groups
-
-        if isinstance(group, object):
-            try:
-                return group.name in self.groups
-            except AttributeError:
-                return False
-
-        return False
+    def get_email(self):
+        return self.username
 
 
 class LastPassGroup(object):
@@ -32,15 +27,10 @@ class LastPassGroup(object):
         if isinstance(user, basestring):
             return user in self.users
 
-        if isinstance(user, object):
-            try:
-                return user.email in self.members
-            except AttributeError:
-                pass
-
-            try:
-                return user.username in self.members
-            except AttributeError:
-                pass
+        if isinstance(user, BaseUser):
+            return user.get_email() in self.users
 
         return False
+
+    def get_count(self):
+        return len(self.users)
