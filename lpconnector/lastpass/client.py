@@ -1,6 +1,9 @@
 import requests
-from .user import LastPassUser
-from .group import LastPassGroup
+from ..ldap.objects import LDAPUser
+from .objects import (
+    LastPassUser,
+    LastPassGroup
+)
 
 
 class AuthorizationError(Exception):
@@ -24,6 +27,17 @@ class LastPassClient(object):
         self.user = config.get('api_user')
         self.key = config.get('api_secret')
 
+    @staticmethod
+    def ldap_to_lastpass_user(user):
+        if isinstance(user, LDAPUser):
+            return LastPassUser(
+                username=user.email,
+                fullname=user.name,
+                groups=user.groups,
+                attribs={'uid': user.uid}
+            )
+        return None
+
     def build_payload(self, command, data=None):
         payload = {
             "cid": self.cid,
@@ -40,14 +54,16 @@ class LastPassClient(object):
         user_data = []
 
         for user in users:
-            user_payload = user.get_lastpass_user().__dict__
+            lp_user = self.ldap_to_lastpass_user(user)
+            if isinstance(lp_user, LastPassUser):
+                user_payload = self.ldap_to_lastpass_user(user).__dict__
 
-            if default_pwd is not None:
-                user_payload['password'] = default_pwd
-                if pwd_reset is not None:
-                    user_payload['password_reset_required'] = pwd_reset
+                if default_pwd is not None:
+                    user_payload['password'] = default_pwd
+                    if pwd_reset is not None:
+                        user_payload['password_reset_required'] = pwd_reset
 
-            user_data.append(user_payload)
+                user_data.append(user_payload)
 
         return self.post_data(LastPassClient.CMD_BATCH_ADD, user_data)
 

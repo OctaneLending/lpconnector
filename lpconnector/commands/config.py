@@ -11,7 +11,7 @@ class Config(BaseCommand):
     """
 
     def execute(self):
-        for section in self.config.sections():
+        for section in self.config.section_names():
             print section + " configs:"
-            print dict(self.config.items(section))
+            print dict(self.config.get_section(section))
         return True

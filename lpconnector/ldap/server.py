@@ -1,7 +1,9 @@
 import sys
 import ldap
-from .user import LDAPUser
-from .group import LDAPGroup
+from .objects import (
+    LDAPUser,
+    LDAPGroup
+)
 
 
 class LDAPServer(object):

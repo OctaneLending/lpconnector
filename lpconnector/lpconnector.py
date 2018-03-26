@@ -1,9 +1,8 @@
-import os
-import ConfigParser
 from importlib import import_module
 from subprocess import call
 from docopt import docopt
 from . import __version__
+from .config.config import Config
 from .commands.basecommand import BaseCommand
 
 
@@ -35,15 +34,7 @@ class LPConnector(object):
     def __init__(self):
         version = "lpconnector v" + __version__
         self.args = docopt(self.__doc__, version=version, options_first=True)
-        self.config = self.get_config()
-
-    def get_config(self):
-        config_path = os.path.join(os.path.abspath('lpconnector'), 'config/config.ini')
-        if self.args.get('--config') is not None:
-            config_path = self.args.get('--config')
-        config = ConfigParser.ConfigParser()
-        config.read(config_path)
-        return config
+        self.config = Config(self.args.get(('--config')))
 
     def main(self):
         command_name = self.args.pop('<command>')
@@ -51,7 +42,7 @@ class LPConnector(object):
 
         if command_name in BaseCommand.COMMAND_MAP.keys():
             command_class = self.get_command_class(command_name)
-            command = command_class(self.config, command_name, argv)
+            command = command_class(command_name, argv)
             command.execute()
         elif command_name == 'help':
             if len(argv) == 1:

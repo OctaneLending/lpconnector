@@ -19,8 +19,8 @@ class Sync(BaseCommand):
 
     """
 
-    def __init__(self, config, command, command_args):
-        BaseCommand.__init__(self, config, command, command_args)
+    def __init__(self, command, command_args):
+        super(Sync, self).__init__(command, command_args)
         self.ldap_server.bind_server()
         self.ldap_users = []
         self.lastpass_users = []
