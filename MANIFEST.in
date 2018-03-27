@@ -1,2 +1,5 @@
+graft src
+graft tests
+
 include *.ini
 recursive-include config *.ini
