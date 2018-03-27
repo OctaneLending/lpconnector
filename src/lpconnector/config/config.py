@@ -6,8 +6,7 @@ class Config(object):
 
     def __init__(self, config_path=None):
         if config_path is None:
-            config_path = os.path.join(os.path.abspath('lpconnector'), 'config/config.ini')
-        print config_path
+            config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
 
         self.config = ConfigParser.ConfigParser()
         self.config.read(config_path)
