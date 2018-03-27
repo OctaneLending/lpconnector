@@ -1,6 +1,6 @@
 from importlib import import_module
 from subprocess import call
-from docopt import docopt
+import docopt
 from . import __version__
 from .config.config import Config
 from .commands.basecommand import BaseCommand
@@ -31,10 +31,10 @@ class LPConnector(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, args=None):
         version = "lpconnector v" + __version__
-        self.args = docopt(self.__doc__, version=version, options_first=True)
-        self.config = Config(self.args.get(('--config')))
+        self.args = docopt.docopt(self.__doc__, argv=args, version=version, options_first=True)
+        self.config = Config(self.args.get('--config'))
 
     def main(self):
         command_name = self.args.pop('<command>')
@@ -52,7 +52,7 @@ class LPConnector(object):
                     exit(subcommand_class.__doc__)
             exit(call(['lpconnector', '--help']))
         else:
-            exit("%r is not a valid command. See `lpconnector help`." % command_name)
+            raise docopt.DocoptExit("%r is not a valid command. See `lpconnector help`." % command_name)
 
         exit("Command: " + command_name + "; Complete.")
 
