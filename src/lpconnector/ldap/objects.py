@@ -1,11 +1,11 @@
 import re
 from ..base.user import BaseUser
-from ..config.config import Config
+from ..base.config import BaseConfig
 
 
 class LDAPObject(object):
     def __init__(self):
-        config = Config()
+        config = BaseConfig()
         self.base_dn = config.ldap('BASE_DN')
 
     def as_dict(self):

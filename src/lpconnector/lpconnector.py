@@ -1,8 +1,9 @@
+import sys
 from importlib import import_module
 from subprocess import call
-from docopt import docopt
+import docopt
 from . import __version__
-from .config.config import Config
+from .base.config import BaseConfig
 from .commands.basecommand import BaseCommand
 
 
@@ -16,7 +17,6 @@ class LPConnector(object):
     Options:
         --version               Print package version and exit
         -h --help               Show command help and exit
-        -c FILE --config=FILE   Specify configuration file path
 
     Commands:
         sync            Sync LDAP users and groups with LastPass Enterprise
@@ -31,10 +31,11 @@ class LPConnector(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, args=None):
         version = "lpconnector v" + __version__
-        self.args = docopt(self.__doc__, version=version, options_first=True)
-        self.config = Config(self.args.get(('--config')))
+        args = args if args else sys.argv[1:]
+        self.args = docopt.docopt(self.__doc__, argv=args, version=version, options_first=True)
+        self.config = BaseConfig()
 
     def main(self):
         command_name = self.args.pop('<command>')
@@ -50,11 +51,10 @@ class LPConnector(object):
                 if subcommand in BaseCommand.COMMAND_MAP.keys():
                     subcommand_class = self.get_command_class(subcommand)
                     exit(subcommand_class.__doc__)
-            exit(call(['lpconnector', '--help']))
+            sys.exit(call(['lpconnector', '--help']))
         else:
-            exit("%r is not a valid command. See `lpconnector help`." % command_name)
+            raise docopt.DocoptExit("%r is not a valid command. See `lpconnector help`." % command_name)
 
-        exit("Command: " + command_name + "; Complete.")
 
     @staticmethod
     def get_command_class(command_name):
