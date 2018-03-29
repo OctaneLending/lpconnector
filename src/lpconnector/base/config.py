@@ -2,11 +2,11 @@ import os
 import ConfigParser
 
 
-class Config(object):
+class BaseConfig(object):
 
     def __init__(self, config_path=None):
         if config_path is None:
-            config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
+            config_path = os.path.join(os.path.dirname(__file__), 'config/config.ini')
 
         self.config = ConfigParser.ConfigParser()
         self.config.read(config_path)

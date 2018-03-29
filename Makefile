@@ -1,3 +1,5 @@
+.PHONY: clean install test
+
 clean: clean-build clean-pyc
 
 clean-build:
@@ -14,6 +16,8 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 
-
 install: clean
 	python setup.py install
+
+test: clean
+	python setup.py test
