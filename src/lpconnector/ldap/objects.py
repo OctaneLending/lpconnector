@@ -1,5 +1,5 @@
 import re
-from ..base.user import BaseUser, BaseObject
+from ..base.objects import BaseUser, BaseObject
 from ..base.config import BaseConfig
 
 

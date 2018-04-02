@@ -1,4 +1,4 @@
-from ..base.user import BaseUser
+from ..base.objects import BaseUser
 
 
 class LastPassUser(BaseUser):
