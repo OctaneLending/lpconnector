@@ -84,7 +84,6 @@ class LastPassClient(object):
         )
         if response:
             for lp_user in response.get('Users').values():
-                print lp_user
                 users.append(LastPassUser(**lp_user))
         return users
 

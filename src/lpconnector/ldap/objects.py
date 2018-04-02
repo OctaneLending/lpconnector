@@ -1,16 +1,16 @@
 import re
-from ..base.user import BaseUser
+from ..base.user import BaseUser, BaseObject
 from ..base.config import BaseConfig
 
 
-class LDAPObject(object):
+class LDAPObject(BaseObject):
     def __init__(self):
         config = BaseConfig()
-        self.base_dn = config.ldap('BASE_DN')
+        self._base_dn = config.ldap('BASE_DN')
 
     def as_dict(self):
-        obj_dict = self.__dict__
-        del obj_dict['base_dn']
+        obj_dict = super(LDAPObject, self).as_dict()
+        del obj_dict['_base_dn']
         return obj_dict
 
     def get_dn(self):
@@ -34,6 +34,9 @@ class LDAPUser(LDAPObject, BaseUser):
                 group_list.append(group_cn.group(1))
         self.groups = group_list
 
+    def as_dict(self):
+        super(LDAPUser, self).as_dict()
+
     def get_uid(self):
         return self.uid
 
@@ -41,7 +44,7 @@ class LDAPUser(LDAPObject, BaseUser):
         return self.email
 
     def get_dn(self):
-        return "uid=" + self.uid + "," + self.base_dn
+        return "uid=" + self.uid + "," + self._base_dn
 
 
 class LDAPGroup(LDAPObject):
@@ -60,7 +63,7 @@ class LDAPGroup(LDAPObject):
         self.members = member_list
 
     def get_dn(self):
-        return "cn=" + self.name + "," + self.base_dn
+        return "cn=" + self.name + "," + self._base_dn
 
     def get_count(self):
         return len(self.members)

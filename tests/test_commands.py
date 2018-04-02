@@ -1,7 +1,6 @@
 import sys
-import pytest
-import docopt
 from ConfigParser import ConfigParser
+import pytest
 import src.lpconnector.commands as commands
 from src.lpconnector.base.config import BaseConfig
 from src.lpconnector.ldap.server import LDAPServer
@@ -57,6 +56,3 @@ def test_command_no_args(capsys):
     assert err == ""
     assert out != ""
     sys.argv = []
-
-
-

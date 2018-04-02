@@ -32,5 +32,5 @@ class LDAPUsers(BaseCommand):   # pylint: disable=too-few-public-methods
 
         self.unbind_ldap()
         for ldap_user in result:
-            print ldap_user.as_dict()
+            print ldap_user.__dict__
         return True

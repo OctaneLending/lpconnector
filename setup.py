@@ -17,7 +17,7 @@ setup(
     description="Connect remote LDAP to LastPass Enterprise API",
     platforms="any",
     setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-cov', 'pytest-sugar', 'docopt'],
+    tests_require=['pytest', 'pytest-cov', 'pytest-sugar', 'pytest-timeout', 'docopt'],
     install_requires=[
         'python-ldap==3.0.0',
         'requests==2.18.4',
