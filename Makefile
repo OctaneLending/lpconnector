@@ -16,6 +16,9 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 
+build: clean
+	python setup.py build
+
 install: clean
 	python setup.py install
 

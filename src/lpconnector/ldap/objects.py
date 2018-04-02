@@ -9,8 +9,9 @@ class LDAPObject(object):
         self.base_dn = config.ldap('BASE_DN')
 
     def as_dict(self):
-        del self.base_dn
-        return self.__dict__
+        obj_dict = self.__dict__
+        del obj_dict['base_dn']
+        return obj_dict
 
     def get_dn(self):
         raise NotImplementedError
