@@ -19,9 +19,10 @@ class LastPassUser(BaseUser):
 
 class LastPassGroup(BaseObject):
 
-    def __init__(self, name, users):
-        self.name = name
-        self.users = users
+    def __init__(self, **kwargs):
+        super(LastPassGroup, self).__init__(**kwargs)
+        self.name = kwargs.get('name')
+        self.users = kwargs.get('users')
 
     def is_member(self, user):
         if isinstance(user, basestring):

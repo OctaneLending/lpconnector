@@ -1,14 +1,17 @@
 class BaseObject(object):
 
     def __init__(self, **kwargs):
+        self._raw = kwargs
         self.name = None
         if 'name' in kwargs:
             self.name = kwargs.get('name')
 
     def as_dict(self):
+        assert not hasattr(super(BaseObject, self), 'as_dict')
         obj_dict = self.__dict__
         if hasattr(self, 'name') and not self.name:
             del obj_dict['name']
+        del obj_dict['_raw']
         return obj_dict
 
 
@@ -16,7 +19,6 @@ class BaseUser(BaseObject):
 
     def __init__(self, **kwargs):
         super(BaseUser, self).__init__(**kwargs)
-        self._raw = kwargs
         self.groups = []
 
     def __getattr__(self, item):
@@ -36,11 +38,6 @@ class BaseUser(BaseObject):
                 return False
 
         return False
-
-    def as_dict(self):
-        user_dict = super(BaseUser, self).as_dict()
-        del user_dict['_raw']
-        return user_dict
 
     def get_uid(self):
         raise NotImplementedError

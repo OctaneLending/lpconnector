@@ -18,7 +18,7 @@ class LDAPObject(BaseObject):
         raise NotImplementedError
 
 
-class LDAPUser(LDAPObject, BaseUser):
+class LDAPUser(BaseUser, LDAPObject):
 
     OBJECT_CLASS = "inetOrgPerson"
     ATTRIBUTES = ["uid", "mail", "cn", "memberOf"]
@@ -34,9 +34,6 @@ class LDAPUser(LDAPObject, BaseUser):
             if group_cn:
                 group_list.append(group_cn.group(1))
         self.groups = group_list
-
-    def as_dict(self):
-        super(LDAPUser, self).as_dict()
 
     def get_uid(self):
         return self.uid
@@ -55,7 +52,7 @@ class LDAPGroup(LDAPObject):
 
     def __init__(self, **kwargs):
         super(LDAPGroup, self).__init__(**kwargs)
-        self.name = kwargs.get('cn')
+        self.name = kwargs.get('cn')[0]
         member_list = []
         for user_dn in kwargs.get('member'):
             uid = re.match(r"uid=(\w*),ou", user_dn)

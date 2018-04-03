@@ -26,6 +26,8 @@ LP_GROUP_RAW = {
 def test_base_object():
     base_obj_a = BaseObject()
     assert isinstance(base_obj_a, object)
+    assert hasattr(base_obj_a, '_raw')
+    assert isinstance(base_obj_a._raw, dict)
     assert hasattr(base_obj_a, 'name')
     assert not base_obj_a.name
     assert not base_obj_a.as_dict()
