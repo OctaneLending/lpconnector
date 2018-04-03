@@ -29,6 +29,11 @@ def test_base_command_good_cmd_no_args():
     assert not base_command.verbose
     assert hasattr(base_command, 'ldap_server')
     assert isinstance(base_command.ldap_server, LDAPServer)
+    assert not base_command.ldap_server.ldap_server
+    base_command.bind_ldap()
+    assert base_command.ldap_server.ldap_server
+    base_command.unbind_ldap()
+    assert not base_command.ldap_server.ldap_server
     assert hasattr(base_command, 'lp_client')
     assert isinstance(base_command.lp_client, LastPassClient)
 

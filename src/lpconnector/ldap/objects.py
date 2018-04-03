@@ -4,7 +4,8 @@ from ..base.config import BaseConfig
 
 
 class LDAPObject(BaseObject):
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super(LDAPObject, self).__init__(**kwargs)
         config = BaseConfig()
         self._base_dn = config.ldap('BASE_DN')
 
@@ -23,7 +24,7 @@ class LDAPUser(LDAPObject, BaseUser):
     ATTRIBUTES = ["uid", "mail", "cn", "memberOf"]
 
     def __init__(self, **kwargs):
-        super(LDAPUser, self).__init__()
+        super(LDAPUser, self).__init__(**kwargs)
         self.uid = kwargs.get('uid')[0]
         self.email = kwargs.get('mail')[0]
         self.name = kwargs.get('cn')[0]
@@ -53,7 +54,7 @@ class LDAPGroup(LDAPObject):
     ATTRIBUTES = ["cn", "member"]
 
     def __init__(self, **kwargs):
-        super(LDAPGroup, self).__init__()
+        super(LDAPGroup, self).__init__(**kwargs)
         self.name = kwargs.get('cn')
         member_list = []
         for user_dn in kwargs.get('member'):

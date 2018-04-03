@@ -1,12 +1,21 @@
 class BaseObject(object):
 
+    def __init__(self, **kwargs):
+        self.name = None
+        if 'name' in kwargs:
+            self.name = kwargs.get('name')
+
     def as_dict(self):
-        return self.__dict__
+        obj_dict = self.__dict__
+        if hasattr(self, 'name') and not self.name:
+            del obj_dict['name']
+        return obj_dict
 
 
 class BaseUser(BaseObject):
 
     def __init__(self, **kwargs):
+        super(BaseUser, self).__init__(**kwargs)
         self._raw = kwargs
         self.groups = []
 
@@ -20,7 +29,7 @@ class BaseUser(BaseObject):
         if isinstance(group, basestring):
             return group in self.groups
 
-        if isinstance(group, object):
+        if isinstance(group, BaseObject):
             try:
                 return group.name in self.groups
             except AttributeError:

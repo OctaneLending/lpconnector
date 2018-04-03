@@ -1,4 +1,4 @@
-from ..base.objects import BaseUser
+from ..base.objects import BaseUser, BaseObject
 
 
 class LastPassUser(BaseUser):
@@ -17,7 +17,7 @@ class LastPassUser(BaseUser):
         return self.username
 
 
-class LastPassGroup(object):
+class LastPassGroup(BaseObject):
 
     def __init__(self, name, users):
         self.name = name
