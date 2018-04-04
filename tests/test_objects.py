@@ -101,6 +101,9 @@ def test_ldap_object(mock_base_config):
     mock_base_config.return_value.ldap.return_value = TEST_DN
     ldap_obj = LDAPObject(**LDAP_GROUP_RAW)
     assert ldap_obj._base_dn == TEST_DN
+    assert '_base_dn' not in ldap_obj.as_dict()
+    with pytest.raises(NotImplementedError):
+        no_dn = ldap_obj.get_dn()
     no_obj_class = deepcopy(LDAP_GROUP_RAW)
     del no_obj_class['objectClass']
     with pytest.raises(LDAPObjectException):
@@ -108,6 +111,13 @@ def test_ldap_object(mock_base_config):
 
 
 @patch('src.lpconnector.ldap.objects.BaseConfig')
+@patch('src.lpconnector.ldap.objects.LDAPUser.ATTRIBUTES_MAP', {
+    'uid': 'uid',
+    'mail': 'email',
+    'cn': 'name',
+    'memberOf': 'groups',
+    'objectClass': 'classes'
+})
 def test_ldap_user(mock_base_config):
     mock_base_config.return_value.ldap.return_value = TEST_DN
     ldap_user = LDAPUser(**LDAP_USER_RAW)
@@ -125,6 +135,11 @@ def test_ldap_user(mock_base_config):
 
 
 @patch('src.lpconnector.ldap.objects.BaseConfig')
+@patch('src.lpconnector.ldap.objects.LDAPGroup.ATTRIBUTES_MAP', {
+    'cn': 'name',
+    'member': 'members',
+    'objectClass': 'classes'
+})
 def test_ldap_group(mock_base_config):
     mock_base_config.return_value.ldap.return_value = TEST_DN
     ldap_group = LDAPGroup(**LDAP_GROUP_RAW)
