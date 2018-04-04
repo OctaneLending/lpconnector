@@ -46,10 +46,10 @@ class BaseCommand(object):
     def __init__(self, command, command_args):
         self.config = BaseConfig()
         if BaseCommand.COMMAND_MAP.get(command).get('argv'):
-            print 'Getting extra args for ' + command
+            #print 'Getting extra args for ' + command
             self.args = docopt(self.__doc__, argv=command_args)
         else:
-            print 'No extra args for ' + command
+            #print 'No extra args for ' + command
             self.args = docopt(self.__doc__)
         self.verbose = self.args.get('--verbose')
 

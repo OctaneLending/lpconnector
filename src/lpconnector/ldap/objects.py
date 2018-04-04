@@ -3,8 +3,16 @@ from ..base.objects import BaseUser, BaseObject
 from ..base.config import BaseConfig
 
 
+class LDAPObjectException(Exception):
+    pass
+
+
 class LDAPObject(BaseObject):
     def __init__(self, **kwargs):
+
+        if 'objectClass' not in kwargs:
+            raise LDAPObjectException('LDAP Object has no object class')
+
         super(LDAPObject, self).__init__(**kwargs)
         config = BaseConfig()
         self._base_dn = config.ldap('BASE_DN')
@@ -21,19 +29,39 @@ class LDAPObject(BaseObject):
 class LDAPUser(BaseUser, LDAPObject):
 
     OBJECT_CLASS = "inetOrgPerson"
-    ATTRIBUTES = ["uid", "mail", "cn", "memberOf"]
+    ATTRIBUTES_MAP = {
+        'uid': 'uid',
+        'mail': 'email',
+        'cn': 'name',
+        'memberOf': 'groups'
+    }
+    # Filter out groups that contain service accounts
+    NON_USER_GROUPS = ['Service Accounts']
 
     def __init__(self, **kwargs):
+
+        if self.OBJECT_CLASS not in kwargs.get('objectClass'):
+            raise LDAPObjectException('LDAP Object is not an LDAP user')
+
         super(LDAPUser, self).__init__(**kwargs)
-        self.uid = kwargs.get('uid')[0]
-        self.email = kwargs.get('mail')[0]
-        self.name = kwargs.get('cn')[0]
-        group_list = []
-        for group_dn in kwargs.get('memberOf'):
-            group_cn = re.match("cn=(.*),ou", group_dn)
-            if group_cn:
-                group_list.append(group_cn.group(1))
-        self.groups = group_list
+
+        # Mandatory Attributes
+        self.uid = ""
+        self.email = ""
+
+        for attr, param in self.ATTRIBUTES_MAP.items():
+            ldap_attr = kwargs.get(attr)
+            if attr == 'memberOf':
+                group_list = []
+                for group_dn in ldap_attr:
+                    group_cn = re.match("cn=(.*),ou", group_dn)
+                    if group_cn:
+                        group_list.append(group_cn.group(1))
+                setattr(self, param, group_list)
+            elif attr == 'objectClass':
+                setattr(self, param, ldap_attr)
+            else:
+                setattr(self, param, ldap_attr[0])
 
     def get_uid(self):
         return self.uid
@@ -48,17 +76,35 @@ class LDAPUser(BaseUser, LDAPObject):
 class LDAPGroup(LDAPObject):
 
     OBJECT_CLASS = "groupOfNames"
-    ATTRIBUTES = ["cn", "member"]
+    ATTRIBUTES_MAP = {
+        'cn': 'name',
+        'member': 'members'
+    }
 
     def __init__(self, **kwargs):
+
+        if self.OBJECT_CLASS not in kwargs.get('objectClass'):
+            raise LDAPObjectException('LDAP Object is not an LDAP group')
+
         super(LDAPGroup, self).__init__(**kwargs)
-        self.name = kwargs.get('cn')[0]
-        member_list = []
-        for user_dn in kwargs.get('member'):
-            uid = re.match(r"uid=(\w*),ou", user_dn)
-            if uid:
-                member_list.append(uid.group(1))
-        self.members = member_list
+
+        # Mandatory Attributes
+        self.name = ""
+        self.members = []
+
+        for attr, param in self.ATTRIBUTES_MAP.items():
+            ldap_attr = kwargs.get(attr)
+            if attr == 'member':
+                member_list = []
+                for user_dn in ldap_attr:
+                    uid = re.match(r"uid=(\w*),ou", user_dn)
+                    if uid:
+                        member_list.append(uid.group(1))
+                setattr(self, param, member_list)
+            elif attr == 'objectClass':
+                setattr(self, param, ldap_attr)
+            else:
+                setattr(self, param, ldap_attr[0])
 
     def get_dn(self):
         return "cn=" + self.name + "," + self._base_dn

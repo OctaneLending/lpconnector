@@ -1,9 +1,48 @@
 import pytest
+from unittest import TestCase
+from mock import patch, Mock
+from src.lpconnector.base.config import BaseConfig
 from src.lpconnector.base.objects import BaseObject, BaseUser
 from src.lpconnector.ldap.objects import LDAPObject, LDAPUser, LDAPGroup
 from src.lpconnector.lastpass.objects import LastPassUser, LastPassGroup
 
 
+TEST_DN = "ou=OU,dc=test,dc=com"
+
+
+LDAP_USER_RAW = {
+    'cn': ['Testy McTester'],
+    'mobile': ['5555555555'],
+    'memberOf': [
+        'cn=Test Group,ou=OU,dc=test,dc=com',
+        'cn=Other Test Group,ou=OU,dc=test,dc=com',
+    ],
+    'uidNumber': ['5555'],
+    'objectClass': [
+        'top',
+        'person',
+        'organizationalPerson',
+        'inetOrgPerson',
+    ],
+    'gidNumber': ['5555'],
+    'sn': ['McTester'],
+    'mail': ['test@test.com'],
+    'givenName': ['Testy'],
+    'uid': ['testy']
+}
+
+LDAP_GROUP_RAW = {
+    'objectClass': [
+        'top',
+        'groupOfNames'
+    ],
+    'member': [
+        'uid=testy,ou=OU,dc=test,dc=com',
+        'uid=othertester,ou=OU,dc=test,dc=com',
+    ],
+    'ou': ['Test Group'],
+    'cn': ['Test Group']
+}
 
 
 LP_USER_RAW = {
@@ -56,6 +95,25 @@ def test_base_user_methods():
     assert base_user.username == LP_USER_RAW.get('username')
     with pytest.raises(AttributeError):
         var = base_user.nothing
+
+@patch('src.lpconnector.base.config.BaseConfig')
+def test_ldap_object(MockBaseConfig):
+    config = MockBaseConfig()
+    config.ldap('BASE_DN').return_value = TEST_DN
+    ldap_obj = LDAPObject(**LDAP_GROUP_RAW)
+    assert ldap_obj._base_dn == TEST_DN
+
+
+#def test_ldap_user_init():
+
+
+#def test_ldap_user_methods():
+
+
+#def test_ldap_group_init():
+
+
+#def test_ldap_group_methods():
 
 
 def test_lastpass_user_init():

@@ -1,0 +1,2 @@
+[LDAP]
+BASE_DN=dc=test,dc=com

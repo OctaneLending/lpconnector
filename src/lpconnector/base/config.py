@@ -4,9 +4,10 @@ import ConfigParser
 
 class BaseConfig(object):
 
-    def __init__(self, config_path=None):
-        if config_path is None:
-            config_path = os.path.join(os.path.dirname(__file__), 'config/config.ini')
+    def __init__(self, config_file=None):
+        if config_file is None:
+            config_file = 'config.ini'
+        config_path = os.path.join(os.path.dirname(__file__), 'config/' + config_file)
 
         self.config = ConfigParser.ConfigParser()
         self.config.read(config_path)
