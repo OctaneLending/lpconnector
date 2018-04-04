@@ -20,6 +20,8 @@ class BaseUser(BaseObject):
     def __init__(self, **kwargs):
         super(BaseUser, self).__init__(**kwargs)
         self.groups = []
+        if 'groups' in kwargs:
+            self.groups = kwargs.get('groups')
 
     def __getattr__(self, item):
         if item in self._raw:
@@ -28,7 +30,7 @@ class BaseUser(BaseObject):
             raise AttributeError
 
     def is_group_member(self, group):
-        if isinstance(group, basestring):
+        if isinstance(group, str):
             return group in self.groups
 
         if isinstance(group, BaseObject):

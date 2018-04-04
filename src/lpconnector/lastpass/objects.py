@@ -5,7 +5,7 @@ class LastPassUser(BaseUser):
 
     def __init__(self, **kwargs):
         super(LastPassUser, self).__init__(**kwargs)
-        self.username = kwargs.get('username')
+        self.name = kwargs.get('username')
         self.fullname = kwargs.get('fullname')
         self.groups = kwargs.get('groups')
         self.attribs = kwargs.get('attribs')
@@ -14,7 +14,7 @@ class LastPassUser(BaseUser):
         return self.attribs.get('uid')
 
     def get_email(self):
-        return self.username
+        return self.name
 
 
 class LastPassGroup(BaseObject):

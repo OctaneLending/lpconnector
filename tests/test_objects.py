@@ -86,14 +86,22 @@ def test_base_user_init():
     assert base_user._raw == LP_USER_RAW
     assert hasattr(base_user, 'groups')
     assert isinstance(base_user.groups, list)
-    assert base_user.groups == []
+    assert base_user.groups == LP_USER_RAW.get('groups')
 
 
 def test_base_user_methods():
     base_user = BaseUser(**LP_USER_RAW)
-    assert base_user.username == LP_USER_RAW.get('username')
-    with pytest.raises(AttributeError):
-        var = base_user.nothing
+    with pytest.raises(NotImplementedError):
+        no_uid = base_user.get_uid()
+    with pytest.raises(NotImplementedError):
+        no_email = base_user.get_email()
+    base_obj = BaseObject(**LP_GROUP_RAW)
+    assert base_user.is_group_member('Test Group')
+    assert base_user.is_group_member(base_obj)
+    assert not base_user.is_group_member('Not Test Group')
+    assert not base_user.is_group_member(1)
+    del base_obj.name
+    assert not base_user.is_group_member(base_obj)
 
 
 @patch('src.lpconnector.ldap.objects.BaseConfig')
@@ -162,8 +170,8 @@ def test_ldap_group(mock_base_config):
 
 def test_lastpass_user_init():
     lp_user = LastPassUser(**LP_USER_RAW)
-    assert hasattr(lp_user, 'username')
-    assert isinstance(lp_user.username, str)
+    assert hasattr(lp_user, 'name')
+    assert isinstance(lp_user.name, str)
     assert hasattr(lp_user, 'fullname')
     assert isinstance(lp_user.fullname, str)
     assert hasattr(lp_user, 'attribs')
@@ -183,8 +191,9 @@ def test_lastpass_user_methods():
     assert lp_user.get_email() == LP_USER_RAW.get('username')
     assert lp_user.is_group_member('Test Group')
     assert not lp_user.is_group_member('Not Test Group')
-    lp_user_expected = LP_USER_RAW
+    lp_user_expected = deepcopy(LP_USER_RAW)
     del lp_user_expected['other']
+    lp_user_expected['name'] = lp_user_expected.pop('username')
     assert lp_user.as_dict() == lp_user_expected
 
 

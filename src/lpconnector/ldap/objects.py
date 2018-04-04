@@ -9,7 +9,6 @@ class LDAPObjectException(Exception):
 
 class LDAPObject(BaseObject):
     def __init__(self, **kwargs):
-        print kwargs
         if 'objectClass' not in kwargs:
             raise LDAPObjectException('LDAP Object has no object class')
 
