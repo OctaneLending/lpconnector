@@ -1,10 +1,10 @@
-from ..base.user import BaseUser
+from ..base.objects import BaseUser, BaseObject
 
 
 class LastPassUser(BaseUser):
 
     def __init__(self, **kwargs):
-        super(LastPassUser, self).__init__()
+        super(LastPassUser, self).__init__(**kwargs)
         self.username = kwargs.get('username')
         self.fullname = kwargs.get('fullname')
         self.groups = kwargs.get('groups')
@@ -17,11 +17,12 @@ class LastPassUser(BaseUser):
         return self.username
 
 
-class LastPassGroup(object):
+class LastPassGroup(BaseObject):
 
-    def __init__(self, name, users):
-        self.name = name
-        self.users = users
+    def __init__(self, **kwargs):
+        super(LastPassGroup, self).__init__(**kwargs)
+        self.name = kwargs.get('name')
+        self.users = kwargs.get('users')
 
     def is_member(self, user):
         if isinstance(user, basestring):

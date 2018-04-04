@@ -10,14 +10,14 @@ def read(fname):
 
 setup(
     name="lpconnector",
-    version='0.4.0',
+    version='0.5.0',
     url="https://www.github.com/OctaneLending/lastpass-ldap-syc",
     author="Joshua Marcus-Hixson",
     author_email="josh@octanelending.com",
     description="Connect remote LDAP to LastPass Enterprise API",
     platforms="any",
     setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-cov', 'docopt'],
+    tests_require=['pytest', 'pytest-cov', 'pytest-sugar', 'pytest-timeout', 'docopt'],
     install_requires=[
         'python-ldap==3.0.0',
         'requests==2.18.4',

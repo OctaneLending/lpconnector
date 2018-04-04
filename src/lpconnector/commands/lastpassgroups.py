@@ -17,5 +17,5 @@ class LastPassGroups(BaseCommand):  # pylint: disable=too-few-public-methods
     def execute(self):
         groups = self.lp_client.get_group_data()
         for group in groups:
-            print group.__dict__
+            print group.as_dict()
         return True

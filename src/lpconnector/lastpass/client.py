@@ -56,7 +56,7 @@ class LastPassClient(object):
         for user in users:
             lp_user = self.ldap_to_lastpass_user(user)
             if isinstance(lp_user, LastPassUser):
-                user_payload = self.ldap_to_lastpass_user(user).__dict__
+                user_payload = self.ldap_to_lastpass_user(user).as_dict()
 
                 if default_pwd is not None:
                     user_payload['password'] = default_pwd

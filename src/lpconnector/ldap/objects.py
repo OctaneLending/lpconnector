@@ -1,28 +1,30 @@
 import re
-from ..base.user import BaseUser
+from ..base.objects import BaseUser, BaseObject
 from ..base.config import BaseConfig
 
 
-class LDAPObject(object):
-    def __init__(self):
+class LDAPObject(BaseObject):
+    def __init__(self, **kwargs):
+        super(LDAPObject, self).__init__(**kwargs)
         config = BaseConfig()
-        self.base_dn = config.ldap('BASE_DN')
+        self._base_dn = config.ldap('BASE_DN')
 
     def as_dict(self):
-        del self.base_dn
-        return self.__dict__
+        obj_dict = super(LDAPObject, self).as_dict()
+        del obj_dict['_base_dn']
+        return obj_dict
 
     def get_dn(self):
         raise NotImplementedError
 
 
-class LDAPUser(LDAPObject, BaseUser):
+class LDAPUser(BaseUser, LDAPObject):
 
     OBJECT_CLASS = "inetOrgPerson"
     ATTRIBUTES = ["uid", "mail", "cn", "memberOf"]
 
     def __init__(self, **kwargs):
-        super(LDAPUser, self).__init__()
+        super(LDAPUser, self).__init__(**kwargs)
         self.uid = kwargs.get('uid')[0]
         self.email = kwargs.get('mail')[0]
         self.name = kwargs.get('cn')[0]
@@ -40,7 +42,7 @@ class LDAPUser(LDAPObject, BaseUser):
         return self.email
 
     def get_dn(self):
-        return "uid=" + self.uid + "," + self.base_dn
+        return "uid=" + self.uid + "," + self._base_dn
 
 
 class LDAPGroup(LDAPObject):
@@ -49,8 +51,8 @@ class LDAPGroup(LDAPObject):
     ATTRIBUTES = ["cn", "member"]
 
     def __init__(self, **kwargs):
-        super(LDAPGroup, self).__init__()
-        self.name = kwargs.get('cn')
+        super(LDAPGroup, self).__init__(**kwargs)
+        self.name = kwargs.get('cn')[0]
         member_list = []
         for user_dn in kwargs.get('member'):
             uid = re.match(r"uid=(\w*),ou", user_dn)
@@ -59,7 +61,7 @@ class LDAPGroup(LDAPObject):
         self.members = member_list
 
     def get_dn(self):
-        return "cn=" + self.name + "," + self.base_dn
+        return "cn=" + self.name + "," + self._base_dn
 
     def get_count(self):
         return len(self.members)
