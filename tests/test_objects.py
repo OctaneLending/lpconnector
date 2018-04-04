@@ -1,9 +1,8 @@
 import pytest
-from unittest import TestCase
+from copy import deepcopy
 from mock import patch, Mock
-from src.lpconnector.base.config import BaseConfig
 from src.lpconnector.base.objects import BaseObject, BaseUser
-from src.lpconnector.ldap.objects import LDAPObject, LDAPUser, LDAPGroup
+from src.lpconnector.ldap.objects import LDAPObject, LDAPUser, LDAPGroup, LDAPObjectException
 from src.lpconnector.lastpass.objects import LastPassUser, LastPassGroup
 
 
@@ -34,7 +33,7 @@ LDAP_USER_RAW = {
 LDAP_GROUP_RAW = {
     'objectClass': [
         'top',
-        'groupOfNames'
+        'groupOfNames',
     ],
     'member': [
         'uid=testy,ou=OU,dc=test,dc=com',
@@ -96,24 +95,54 @@ def test_base_user_methods():
     with pytest.raises(AttributeError):
         var = base_user.nothing
 
-@patch('src.lpconnector.base.config.BaseConfig')
-def test_ldap_object(MockBaseConfig):
-    config = MockBaseConfig()
-    config.ldap('BASE_DN').return_value = TEST_DN
+
+@patch('src.lpconnector.ldap.objects.BaseConfig')
+def test_ldap_object(mock_base_config):
+    mock_base_config.return_value.ldap.return_value = TEST_DN
     ldap_obj = LDAPObject(**LDAP_GROUP_RAW)
     assert ldap_obj._base_dn == TEST_DN
+    no_obj_class = deepcopy(LDAP_GROUP_RAW)
+    del no_obj_class['objectClass']
+    with pytest.raises(LDAPObjectException):
+        no_ldap_obj = LDAPObject(**no_obj_class)
 
 
-#def test_ldap_user_init():
+@patch('src.lpconnector.ldap.objects.BaseConfig')
+def test_ldap_user(mock_base_config):
+    mock_base_config.return_value.ldap.return_value = TEST_DN
+    ldap_user = LDAPUser(**LDAP_USER_RAW)
+    for attr in LDAPUser.ATTRIBUTES_MAP.values():
+        assert hasattr(ldap_user, attr)
+    assert isinstance(ldap_user.groups, list)
+    assert len(ldap_user.groups) == len(LDAP_USER_RAW.get('memberOf'))
+    assert ldap_user.get_uid() == LDAP_USER_RAW.get('uid')[0]
+    assert ldap_user.get_email() == LDAP_USER_RAW.get('mail')[0]
+    assert ldap_user.get_dn() == "uid=" + LDAP_USER_RAW.get('uid')[0] + "," + TEST_DN
+    bad_obj_class = deepcopy(LDAP_USER_RAW)
+    bad_obj_class.get('objectClass').remove(LDAPUser.OBJECT_CLASS)
+    with pytest.raises(LDAPObjectException):
+        no_ldap_user = LDAPUser(**bad_obj_class)
 
 
-#def test_ldap_user_methods():
-
-
-#def test_ldap_group_init():
-
-
-#def test_ldap_group_methods():
+@patch('src.lpconnector.ldap.objects.BaseConfig')
+def test_ldap_group(mock_base_config):
+    mock_base_config.return_value.ldap.return_value = TEST_DN
+    ldap_group = LDAPGroup(**LDAP_GROUP_RAW)
+    for attr in LDAPGroup.ATTRIBUTES_MAP.values():
+        assert hasattr(ldap_group, attr)
+    assert isinstance(ldap_group.members, list)
+    assert ldap_group.name == LDAP_GROUP_RAW.get('cn')[0]
+    assert ldap_group.get_count() == len(LDAP_GROUP_RAW.get('member'))
+    assert ldap_group.get_dn() == "cn=" + LDAP_GROUP_RAW.get('cn')[0] + "," + TEST_DN
+    ldap_user = LDAPUser(**LDAP_USER_RAW)
+    assert ldap_group.is_member(ldap_user)
+    assert ldap_group.is_member('othertester')
+    assert not ldap_group.is_member('nottest')
+    assert not ldap_group.is_member(1)
+    bad_obj_class = deepcopy(LDAP_GROUP_RAW)
+    bad_obj_class.get('objectClass').remove(LDAPGroup.OBJECT_CLASS)
+    with pytest.raises(LDAPObjectException):
+        no_ldap_group = LDAPGroup(**bad_obj_class)
 
 
 def test_lastpass_user_init():

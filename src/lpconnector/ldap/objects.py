@@ -9,13 +9,13 @@ class LDAPObjectException(Exception):
 
 class LDAPObject(BaseObject):
     def __init__(self, **kwargs):
-
+        print kwargs
         if 'objectClass' not in kwargs:
             raise LDAPObjectException('LDAP Object has no object class')
 
         super(LDAPObject, self).__init__(**kwargs)
-        config = BaseConfig()
-        self._base_dn = config.ldap('BASE_DN')
+
+        self._base_dn = BaseConfig().ldap('BASE_DN')
 
     def as_dict(self):
         obj_dict = super(LDAPObject, self).as_dict()
@@ -28,22 +28,24 @@ class LDAPObject(BaseObject):
 
 class LDAPUser(BaseUser, LDAPObject):
 
+    # Object class that identifies a user
     OBJECT_CLASS = "inetOrgPerson"
+    # LDAP attributes to store as class attributes
+    # uid, mail, and memberOf are mandatory
     ATTRIBUTES_MAP = {
         'uid': 'uid',
         'mail': 'email',
         'cn': 'name',
         'memberOf': 'groups'
     }
-    # Filter out groups that contain service accounts
+    # Filter out groups that contain non-employee accounts
     NON_USER_GROUPS = ['Service Accounts']
 
     def __init__(self, **kwargs):
+        super(LDAPUser, self).__init__(**kwargs)
 
         if self.OBJECT_CLASS not in kwargs.get('objectClass'):
             raise LDAPObjectException('LDAP Object is not an LDAP user')
-
-        super(LDAPUser, self).__init__(**kwargs)
 
         # Mandatory Attributes
         self.uid = ""
@@ -75,18 +77,20 @@ class LDAPUser(BaseUser, LDAPObject):
 
 class LDAPGroup(LDAPObject):
 
+    # Object class that identifies a user
     OBJECT_CLASS = "groupOfNames"
+    # LDAP attributes to store as class attributes
+    # cn and member are mandatory
     ATTRIBUTES_MAP = {
         'cn': 'name',
         'member': 'members'
     }
 
     def __init__(self, **kwargs):
+        super(LDAPGroup, self).__init__(**kwargs)
 
         if self.OBJECT_CLASS not in kwargs.get('objectClass'):
             raise LDAPObjectException('LDAP Object is not an LDAP group')
-
-        super(LDAPGroup, self).__init__(**kwargs)
 
         # Mandatory Attributes
         self.name = ""
