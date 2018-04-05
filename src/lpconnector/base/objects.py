@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class BaseObject(object):
 
     def __init__(self, **kwargs):
@@ -6,9 +9,15 @@ class BaseObject(object):
         if 'name' in kwargs:
             self.name = kwargs.get('name')
 
+    def __getattr__(self, item):
+        if item in self._raw:
+            return self._raw.get(item)
+        else:
+            raise AttributeError
+
     def as_dict(self):
         assert not hasattr(super(BaseObject, self), 'as_dict')
-        obj_dict = self.__dict__
+        obj_dict = deepcopy(self.__dict__)
         if hasattr(self, 'name') and not self.name:
             del obj_dict['name']
         del obj_dict['_raw']
@@ -22,12 +31,6 @@ class BaseUser(BaseObject):
         self.groups = []
         if 'groups' in kwargs:
             self.groups = kwargs.get('groups')
-
-    def __getattr__(self, item):
-        if item in self._raw:
-            return self._raw.get(item)
-        else:
-            raise AttributeError
 
     def is_group_member(self, group):
         if isinstance(group, str):

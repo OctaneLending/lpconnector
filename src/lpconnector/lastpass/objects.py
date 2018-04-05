@@ -25,7 +25,7 @@ class LastPassGroup(BaseObject):
         self.users = kwargs.get('users')
 
     def is_member(self, user):
-        if isinstance(user, basestring):
+        if isinstance(user, str):
             return user in self.users
 
         if isinstance(user, BaseUser):

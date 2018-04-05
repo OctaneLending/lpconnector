@@ -1,4 +1,5 @@
 import re
+from copy import deepcopy
 from ..base.objects import BaseUser, BaseObject
 from ..base.config import BaseConfig
 
@@ -17,7 +18,7 @@ class LDAPObject(BaseObject):
         self._base_dn = BaseConfig().ldap('BASE_DN')
 
     def as_dict(self):
-        obj_dict = super(LDAPObject, self).as_dict()
+        obj_dict = deepcopy(super(LDAPObject, self).as_dict())
         del obj_dict['_base_dn']
         return obj_dict
 
@@ -116,7 +117,7 @@ class LDAPGroup(LDAPObject):
         return len(self.members)
 
     def is_member(self, user):
-        if isinstance(user, basestring):
+        if isinstance(user, str):
             return user in self.members
 
         if isinstance(user, BaseUser):
