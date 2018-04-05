@@ -1,8 +1,6 @@
 import sys
-from ConfigParser import ConfigParser
 import pytest
 import src.lpconnector.commands as commands
-from src.lpconnector.base.config import BaseConfig
 from src.lpconnector.ldap.server import LDAPServer
 from src.lpconnector.lastpass.client import LastPassClient
 
@@ -21,10 +19,6 @@ def test_base_command_fail_execute():
 def test_base_command_good_cmd_no_args():
     base_command = commands.BaseCommand('config', {})
     assert hasattr(base_command, 'config')
-    base_config = base_command.config
-    assert isinstance(base_config, BaseConfig)
-    config_parser = base_config.config
-    assert isinstance(config_parser, ConfigParser)
     assert hasattr(base_command, 'verbose')
     assert not base_command.verbose
     assert hasattr(base_command, 'ldap_server')

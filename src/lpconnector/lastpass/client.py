@@ -91,8 +91,8 @@ class LastPassClient(object):
         response = self.get_data(LastPassClient.CMD_GET_USER_DATA)
         groups = []
         if response:
-            for group, users in response.get('Groups').iteritems():
-                groups.append(LastPassGroup(name=group, users=users))
+            for group in response.get('Groups').values():
+                groups.append(LastPassGroup(**group))
         return groups
 
     def delete_user(self, user, action=0):

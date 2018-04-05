@@ -1,9 +1,6 @@
 import sys
 import ldap
-from .objects import (
-    LDAPUser,
-    LDAPGroup
-)
+from .objects import LDAPUser, LDAPGroup, LDAPObjectException
 
 
 class LDAPServer(object):
@@ -31,14 +28,14 @@ class LDAPServer(object):
 
     def get_all_users(self):
         search_filter = "(&(objectClass=" + LDAPUser.OBJECT_CLASS + ")"
-        search_filter += "(!(memberOf=cn=Service Accounts," + self.base_dn + ")))"
+        if LDAPUser.NON_USER_GROUPS:
+            search_filter += "(!"
+            for group in LDAPUser.NON_USER_GROUPS:
+                search_filter += "(memberOf=cn=" + group + "," + self.base_dn + ")"
+            search_filter += ")"
+        search_filter += ")"
 
         return self.do_search(search_filter, LDAPUser.OBJECT_CLASS)
-
-    def get_all_groups(self):
-        search_filter = "(&(objectClass=" + LDAPGroup.OBJECT_CLASS + "))"
-
-        return self.do_search(search_filter, LDAPGroup.OBJECT_CLASS)
 
     def get_users_by_uid(self, uids):
         search_filter = ""
@@ -65,6 +62,15 @@ class LDAPServer(object):
 
         return self.do_search(search_filter, LDAPUser.OBJECT_CLASS)
 
+    def get_groups(self, groups=None):
+        search_filter = "(&(objectClass=" + LDAPGroup.OBJECT_CLASS + ")"
+        if groups:
+            for group in groups:
+                search_filter += "(cn=" + group + ")"
+        search_filter += ")"
+
+        return self.do_search(search_filter, LDAPGroup.OBJECT_CLASS)
+
     def do_search(self, search_filter, ldap_obj_class):
         search_scope = ldap.SCOPE_SUBTREE
         result_set = []
@@ -73,20 +79,18 @@ class LDAPServer(object):
             print "No server present, binding to default server"
             self.bind_server()
 
-        if ldap_obj_class == LDAPUser.OBJECT_CLASS:
-            search_attributes = LDAPUser.ATTRIBUTES
-        elif ldap_obj_class == LDAPGroup.OBJECT_CLASS:
-            search_attributes = LDAPGroup.ATTRIBUTES
-        else:
-            print "Invalid search type, must be a user or a group"
-            return result_set
+        if ldap_obj_class not in [LDAPUser.OBJECT_CLASS, LDAPGroup.OBJECT_CLASS]:
+            raise LDAPObjectException((
+                'LDAP Object Class must be %s or %s',
+                LDAPUser.OBJECT_CLASS,
+                LDAPGroup.OBJECT_CLASS
+            ))
 
         try:
             result_id = self.ldap_server.search(
                 self.base_dn,
                 search_scope,
-                search_filter,
-                search_attributes
+                search_filter
             )
             while 1:
                 result_type, result_data = self.ldap_server.result(result_id, 0)
