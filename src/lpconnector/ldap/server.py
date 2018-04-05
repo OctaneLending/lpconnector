@@ -80,11 +80,11 @@ class LDAPServer(object):
             self.bind_server()
 
         if ldap_obj_class not in [LDAPUser.OBJECT_CLASS, LDAPGroup.OBJECT_CLASS]:
-            raise LDAPObjectException(
+            raise LDAPObjectException((
                 'LDAP Object Class must be %s or %s',
                 LDAPUser.OBJECT_CLASS,
                 LDAPGroup.OBJECT_CLASS
-            )
+            ))
 
         try:
             result_id = self.ldap_server.search(
