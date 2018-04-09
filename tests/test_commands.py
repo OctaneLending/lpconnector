@@ -19,8 +19,6 @@ def test_base_command_fail_execute():
 def test_base_command_good_cmd_no_args():
     base_command = commands.BaseCommand('config', {})
     assert hasattr(base_command, 'config')
-    assert hasattr(base_command, 'verbose')
-    assert not base_command.verbose
     assert hasattr(base_command, 'ldap_server')
     assert isinstance(base_command.ldap_server, LDAPServer)
     assert not base_command.ldap_server.ldap_server
@@ -34,10 +32,8 @@ def test_base_command_good_cmd_no_args():
 
 def test_command_with_args():
     sys.argv = ['lpconnector', 'lastpassuser']
-    args = ['--verbose', '--dry-run', '--url=test.com']
+    args = ['--dry-run', '--url=test.com']
     command = commands.LastPassUsers('lastpassusers', args)
-    assert hasattr(command, 'verbose')
-    assert command.verbose
     assert hasattr(command, 'lp_client')
     lp_client = command.lp_client
     assert isinstance(lp_client, LastPassClient)

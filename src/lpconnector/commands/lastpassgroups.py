@@ -9,7 +9,6 @@ class LastPassGroups(BaseCommand):  # pylint: disable=too-few-public-methods
         lastpassgroups [options]
 
         -n --dry-run            Display API requests instead of sending them
-        -v --verbose            Print verbose output  # default True if dry-run enabled
         --url=URL               Specify API endpoint URL
 
     """

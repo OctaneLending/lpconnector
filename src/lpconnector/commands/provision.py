@@ -6,11 +6,10 @@ class Provision(BaseCommand):   # pylint: disable=too-few-public-methods
     """
     Usage:
         provision [--users=UIDs | --groups=GCNs] [--url=URL] [--password=PWD]
-            [--no-reset-password] [--dry-run] [--verbose]
+            [--no-reset-password] [--dry-run]
 
 
         -n --dry-run            Display API requests instead of sending them
-        -v --verbose            Print verbose output  # default True if dry-run enabled
         -u UIDS --users=UIDs    Comma separated list of user uids to provision/sync
         -g GCNs --groups=GCNs   Comma separated list of group common names to provision/sync  # quote names with spaces
         --url=URL               Specify API endpoint URL

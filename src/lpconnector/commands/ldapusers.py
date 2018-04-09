@@ -6,9 +6,8 @@ class LDAPUsers(BaseCommand):   # pylint: disable=too-few-public-methods
     Display users in remote directory
 
     Usage:
-        ldapusers [--verbose] [--users=UIDs | --groups=GCNs]
+        ldapusers [--users=UIDs | --groups=GCNs]
 
-        -v --verbose            Print verbose output
         -u UIDS --users=UIDs    Comma separated list of user uids to provision/sync
         -g GCNs --groups=GCNs   Comma separated list of group common names to provision/sync  # quote names with spaces
 

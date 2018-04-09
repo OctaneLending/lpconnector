@@ -6,9 +6,8 @@ class LDAPGroups(BaseCommand):  # pylint: disable=too-few-public-methods
     Display groups in LDAP
 
     Usage:
-        ldapgroups [--verbose] [--groups=GCNs]
+        ldapgroups [--groups=GCNs]
 
-        -v --verbose            Print verbose output
         -g GCNs --groups=GCNs   Comma separated list of group common names to provision/sync  # quote names with spaces
 
     """

@@ -9,7 +9,6 @@ class LastPassUsers(BaseCommand):   # pylint: disable=too-few-public-methods
         lastpassusers [options]
 
         -n --dry-run            Display API requests instead of sending them
-        -v --verbose            Print verbose output  # default True if dry-run enabled
         --url=URL               Specify API endpoint URL
         --email=EMAIL           Get a single user by their email address
         --disabled              Get only disabled users
