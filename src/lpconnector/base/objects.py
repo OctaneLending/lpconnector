@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 
-class BaseObject(object):
+class BaseObject(object):   # pylint: disable=too-few-public-methods
 
     def __init__(self, **kwargs):
         self._raw = kwargs
