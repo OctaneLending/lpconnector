@@ -1,3 +1,4 @@
+from __future__ import print_function
 from .basecommand import BaseCommand
 
 
@@ -23,25 +24,25 @@ class Provision(BaseCommand):   # pylint: disable=too-few-public-methods
 
         new_users = []
         if self.args.get('--users') is None and self.args.get('--groups') is None:
-            print "Provisioning ALL users..."
+            print("Provisioning ALL users...")
             new_users = self.ldap_server.get_all_users()
         if self.args.get('--users') is not None:
             users = self.args.get('--users').split(',')
-            print "Provisioning " + str(len(users)) + " user(s)..."
+            print("Provisioning " + str(len(users)) + " user(s)...")
             new_users = self.ldap_server.get_users_by_uid(users)
 
         if self.args.get('--groups') is not None:
             groups = self.args.get('--groups').split(',')
-            print "Provisioning " + str(len(groups)) + " group(s)..."
+            print("Provisioning " + str(len(groups)) + " group(s)...")
             new_users = self.ldap_server.get_users_by_group(groups)
 
-        print "Retrieved " + str(len(new_users)) + " to user(s) provision..."
+        print("Retrieved " + str(len(new_users)) + " to user(s) provision...")
         self.unbind_ldap()
 
         password = self.args.get('--password')
         no_reset = self.args.get('--no-reset-password')
         if self.lp_client.batch_add(new_users, password, no_reset):
-            print str(len(new_users)) + " user(s) successfully provisioned."
+            print(str(len(new_users)) + " user(s) successfully provisioned.")
         else:
             exit("Provisioning failed; exiting")
         return True

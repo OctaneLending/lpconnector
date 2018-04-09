@@ -1,3 +1,4 @@
+from __future__ import print_function
 from .basecommand import BaseCommand
 
 
@@ -24,5 +25,5 @@ class LDAPGroups(BaseCommand):  # pylint: disable=too-few-public-methods
         self.unbind_ldap()
 
         for group in ldap_groups:
-            print group.as_dict()
+            print(group.as_dict())
         return True

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from .basecommand import BaseCommand
 
 
@@ -12,6 +13,6 @@ class Config(BaseCommand):  # pylint: disable=too-few-public-methods
 
     def execute(self):
         for section in self.config.section_names():
-            print section + " configs:"
-            print dict(self.config.get_section(section))
+            print(section + " configs:")
+            print(dict(self.config.get_section(section)))
         return True

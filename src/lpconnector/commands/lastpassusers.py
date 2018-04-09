@@ -1,3 +1,4 @@
+from __future__ import print_function
 from .basecommand import BaseCommand
 
 
@@ -23,5 +24,5 @@ class LastPassUsers(BaseCommand):   # pylint: disable=too-few-public-methods
             admin=self.args.get('--admin')
         )
         for user in users:
-            print user.as_dict()
+            print(user.as_dict())
         return True

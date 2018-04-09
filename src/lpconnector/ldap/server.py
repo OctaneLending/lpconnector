@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import ldap
 from .objects import LDAPUser, LDAPGroup, LDAPObjectException
@@ -22,7 +23,7 @@ class LDAPServer(object):
             self.ldap_server.protocol_version = ldap.VERSION3
             self.ldap_server.simple_bind_s(bind_dn, bind_pw)
         except ldap.LDAPError, error:
-            print error
+            print(error)
             sys.exit("LDAP Connection failed; exiting")
         return True
 
@@ -76,7 +77,7 @@ class LDAPServer(object):
         result_set = []
 
         if self.ldap_server is None:
-            print "No server present, binding to default server"
+            print("No server present, binding to default server")
             self.bind_server()
 
         if ldap_obj_class not in [LDAPUser.OBJECT_CLASS, LDAPGroup.OBJECT_CLASS]:
@@ -103,7 +104,7 @@ class LDAPServer(object):
                         elif ldap_obj_class == LDAPGroup.OBJECT_CLASS:
                             result_set.append(LDAPGroup(**result_data[0][1]))
         except ldap.LDAPError, error:
-            print error
+            print(error)
             sys.exit("LDAP Connection failed; exiting")
         return result_set
 

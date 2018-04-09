@@ -1,9 +1,7 @@
+from __future__ import print_function
 import requests
 from ..ldap.objects import LDAPUser
-from .objects import (
-    LastPassUser,
-    LastPassGroup
-)
+from .objects import LastPassUser, LastPassGroup
 
 
 class AuthorizationError(Exception):
@@ -110,14 +108,14 @@ class LastPassClient(object):
     def get_data(self, command, data_payload=None):
         payload = self.build_payload(command, data_payload)
         if self.dry_run:
-            print payload
+            print(payload)
             return {}
         return self.make_request(self.url, payload)
 
     def post_data(self, command, data_payload=None):
         payload = self.build_payload(command, data_payload)
         if self.dry_run:
-            print payload
+            print(payload)
             return True
         result = self.make_request(self.url, payload)
         return len(result) > 0
@@ -137,10 +135,10 @@ class LastPassClient(object):
                     errors = ", ".join(json_response.get('error'))
                 elif 'errors' in json_response:
                     errors = ", ".join(json_response.get('errors'))
-                print status + ": " + errors
+                print(status + ": " + errors)
                 return {}
 
         except Exception:
-            print "FAIL: Authorization Error; API Connection failed; exiting"
+            print("FAIL: Authorization Error; API Connection failed; exiting")
             raise AuthorizationError(Exception)
         return json_response
