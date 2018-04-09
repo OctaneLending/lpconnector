@@ -15,14 +15,14 @@ class LDAPServer(object):
         self.ldap_server = None
 
     def bind_server(self):
-        self.ldap_server = ldap.initialize(self.host)
+        self.ldap_server = ldap.initialize(self.host)   # pylint: disable=no-member
 
         bind_dn = "uid=" + self.user + "," + self.base_dn
         bind_pw = self.pwd
         try:
-            self.ldap_server.protocol_version = ldap.VERSION3
+            self.ldap_server.protocol_version = ldap.VERSION3   # pylint: disable=no-member
             self.ldap_server.simple_bind_s(bind_dn, bind_pw)
-        except ldap.LDAPError, error:
+        except ldap.LDAPError, error:   # pylint: disable=no-member
             print(error)
             sys.exit("LDAP Connection failed; exiting")
         return True
@@ -73,7 +73,7 @@ class LDAPServer(object):
         return self.do_search(search_filter, LDAPGroup.OBJECT_CLASS)
 
     def do_search(self, search_filter, ldap_obj_class):
-        search_scope = ldap.SCOPE_SUBTREE
+        search_scope = ldap.SCOPE_SUBTREE   # pylint: disable=no-member
         result_set = []
 
         if self.ldap_server is None:
@@ -98,12 +98,12 @@ class LDAPServer(object):
                 if not result_data:
                     break
                 else:
-                    if result_type == ldap.RES_SEARCH_ENTRY:
+                    if result_type == ldap.RES_SEARCH_ENTRY:   # pylint: disable=no-member
                         if ldap_obj_class == LDAPUser.OBJECT_CLASS:
                             result_set.append(LDAPUser(**result_data[0][1]))
                         elif ldap_obj_class == LDAPGroup.OBJECT_CLASS:
                             result_set.append(LDAPGroup(**result_data[0][1]))
-        except ldap.LDAPError, error:
+        except ldap.LDAPError, error:   # pylint: disable=no-member
             print(error)
             sys.exit("LDAP Connection failed; exiting")
         return result_set
