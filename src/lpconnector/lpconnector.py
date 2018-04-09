@@ -56,7 +56,6 @@ class LPConnector(object):
         else:
             raise docopt.DocoptExit("%r is not a valid command. See `lpconnector help`." % command_name)
 
-
     @staticmethod
     def get_command_class(command_name):
         module_name = '.commands.%s' % command_name
