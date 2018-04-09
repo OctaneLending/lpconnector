@@ -31,10 +31,10 @@ class LastPassClient(object):
     def ldap_to_lastpass_user(user):
         if isinstance(user, LDAPUser):
             return LastPassUser(
-                username=user.email,
+                username=user.get_email(),
                 fullname=user.name,
                 groups=user.groups,
-                attribs={'uid': user.uid}
+                attribs={'uid': user.get_uid()}
             )
         return None
 

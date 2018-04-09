@@ -42,7 +42,7 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
                 self.ldap_users = self.ldap_server.get_users_by_group(groups)
             print "Retrieving " + str(len(self.ldap_users)) + " LDAP Users..."
 
-            ldap_user_emails = [user.email for user in self.ldap_users]
+            ldap_user_emails = [user.get_email() for user in self.ldap_users]
             for email in ldap_user_emails:
                 lp_user = self.lp_client.get_user_data(email)
                 if lp_user:
@@ -82,10 +82,10 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
         if not del_users:
             print str(len(del_users)) + " user(s) to delete..."
             for user in del_users:
-                if self.lp_client.delete_user(user.username):
-                    print user.username + " successfully deactivated..."
+                if self.lp_client.delete_user(user.get_email()):
+                    print user.get_email() + " successfully deactivated..."
                 else:
-                    print "Failed to delete " + user.username
+                    print "Failed to delete " + user.get_email()
                     return False
         else:
             print "No users to delete"
@@ -96,14 +96,14 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
         print str(len(synced_users)) + " user(s) to sync..."
         lp_user_dict = {}
         for lp_user in self.lastpass_users:
-            lp_user_dict[lp_user.username] = lp_user
+            lp_user_dict[lp_user.get_email()] = lp_user
 
         user_payload = []
         for user in synced_users:
             update = False
-            payload_dict = {'username': user.email}
+            payload_dict = {'username': user.get_email()}
             ldap_groups = user.groups
-            lp_groups = lp_user_dict.get(user.email).groups
+            lp_groups = lp_user_dict.get(user.get_email()).groups
             new_groups = ldap_groups
             del_groups = []
 
@@ -132,16 +132,16 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
         return True
 
     def get_new_users(self):
-        lastpass_emails = set(x.username for x in self.lastpass_users)
-        new_users = [y for y in self.ldap_users if y.email not in lastpass_emails]
+        lastpass_emails = set(x.get_email() for x in self.lastpass_users)
+        new_users = [y for y in self.ldap_users if y.get_email() not in lastpass_emails]
         return new_users
 
     def get_del_users(self):
-        ldap_emails = set(x.email for x in self.ldap_users)
-        del_users = [y for y in self.lastpass_users if y.username not in ldap_emails]
+        ldap_emails = set(x.get_email() for x in self.ldap_users)
+        del_users = [y for y in self.lastpass_users if y.get_email() not in ldap_emails]
         return del_users
 
     def get_synced_users(self):
-        lastpass_emails = set(x.username for x in self.lastpass_users)
-        synced_users = [y for y in self.ldap_users if y.email in lastpass_emails]
+        lastpass_emails = set(x.get_email() for x in self.lastpass_users)
+        synced_users = [y for y in self.ldap_users if y.get_email() in lastpass_emails]
         return synced_users
