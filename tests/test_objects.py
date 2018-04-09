@@ -101,6 +101,8 @@ def test_base_user_methods():
     assert not base_user.is_group_member('Not Test Group')
     assert not base_user.is_group_member(1)
     del base_obj.name
+    del base_obj._raw['name']
+    assert not hasattr(base_obj, 'name')
     assert not base_user.is_group_member(base_obj)
 
 
