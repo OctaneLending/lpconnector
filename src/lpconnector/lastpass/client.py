@@ -107,9 +107,6 @@ class LastPassClient(object):
 
     def get_data(self, command, data_payload=None):
         payload = self.build_payload(command, data_payload)
-        if self.dry_run:
-            print(payload)
-            return {}
         return self.make_request(self.url, payload)
 
     def post_data(self, command, data_payload=None):

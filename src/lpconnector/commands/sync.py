@@ -66,7 +66,7 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
 
     def add_new_users(self):
         new_users = self.get_new_users()
-        if not new_users:
+        if new_users:
             print(str(len(new_users)) + " user(s) to add...")
             if self.lp_client.batch_add(new_users):
                 print(str(len(new_users)) + " user(s) successfully added...")
@@ -79,7 +79,7 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
 
     def del_old_users(self):
         del_users = self.get_del_users()
-        if not del_users:
+        if del_users:
             print(str(len(del_users)) + " user(s) to delete...")
             for user in del_users:
                 if self.lp_client.delete_user(user.get_email()):
