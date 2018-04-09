@@ -1,3 +1,4 @@
+from __future__ import print_function
 from .basecommand import BaseCommand
 
 
@@ -26,20 +27,20 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
 
     def execute(self):
         if self.args.get('--users') is None and self.args.get('--groups') is None:
-            print "Syncing ALL users to LastPass..."
+            print("Syncing ALL users to LastPass...")
             self.ldap_users = self.ldap_server.get_all_users()
-            print "Retrieving " + str(len(self.ldap_users)) + " LDAP Users..."
+            print("Retrieving " + str(len(self.ldap_users)) + " LDAP Users...")
             self.lastpass_users = self.lp_client.get_user_data()
         else:
             if self.args.get('--users') is not None:
                 users = self.args.get('--users').split(',')
-                print "Syncing " + str(len(users)) + " user(s)..."
+                print("Syncing " + str(len(users)) + " user(s)...")
                 self.ldap_users = self.ldap_server.get_users_by_uid(users)
             if self.args.get('--groups') is not None:
                 groups = self.args.get('--groups').split(',')
-                print "Syncing " + str(len(groups)) + " group(s)..."
+                print("Syncing " + str(len(groups)) + " group(s)...")
                 self.ldap_users = self.ldap_server.get_users_by_group(groups)
-            print "Retrieving " + str(len(self.ldap_users)) + " LDAP Users..."
+            print("Retrieving " + str(len(self.ldap_users)) + " LDAP Users...")
 
             ldap_user_emails = [user.get_email() for user in self.ldap_users]
             for email in ldap_user_emails:
@@ -47,7 +48,7 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
                 if lp_user:
                     self.lastpass_users.append(lp_user[0])
         self.unbind_ldap()
-        print "Retrieved " + str(len(self.lastpass_users)) + " LastPass Users..."
+        print("Retrieved " + str(len(self.lastpass_users)) + " LastPass Users...")
 
         return self.sync()
 
@@ -65,34 +66,34 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
 
     def add_new_users(self):
         new_users = self.get_new_users()
-        if not new_users:
-            print str(len(new_users)) + " user(s) to add..."
+        if new_users:
+            print(str(len(new_users)) + " user(s) to add...")
             if self.lp_client.batch_add(new_users):
-                print str(len(new_users)) + " user(s) successfully added..."
+                print(str(len(new_users)) + " user(s) successfully added...")
             else:
-                print "Failed to add users"
+                print("Failed to add users")
                 return False
         else:
-            print "No users to add"
+            print("No users to add")
         return True
 
     def del_old_users(self):
         del_users = self.get_del_users()
-        if not del_users:
-            print str(len(del_users)) + " user(s) to delete..."
+        if del_users:
+            print(str(len(del_users)) + " user(s) to delete...")
             for user in del_users:
                 if self.lp_client.delete_user(user.get_email()):
-                    print user.get_email() + " successfully deactivated..."
+                    print(user.get_email() + " successfully deactivated...")
                 else:
-                    print "Failed to delete " + user.get_email()
+                    print("Failed to delete " + user.get_email())
                     return False
         else:
-            print "No users to delete"
+            print("No users to delete")
         return True
 
     def sync_user_groups(self):
         synced_users = self.get_synced_users()
-        print str(len(synced_users)) + " user(s) to sync..."
+        print(str(len(synced_users)) + " user(s) to sync...")
         lp_user_dict = {}
         for lp_user in self.lastpass_users:
             lp_user_dict[lp_user.get_email()] = lp_user
@@ -121,12 +122,12 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
 
         if not user_payload:
             if self.lp_client.sync_groups(user_payload):
-                print str(len(user_payload)) + " user(s) successfully synced..."
+                print(str(len(user_payload)) + " user(s) successfully synced...")
                 return True
             else:
                 exit("Syncing failed; exiting")
         else:
-            print "All users up to date..."
+            print("All users up to date...")
 
         return True
 

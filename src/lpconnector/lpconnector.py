@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 from importlib import import_module
 from subprocess import call
@@ -63,6 +64,6 @@ class LPConnector(object):
         try:
             command_class = getattr(module, BaseCommand.COMMAND_MAP.get(command_name).get('class'))
         except AttributeError:
-            print 'Command module not found'
+            print('Command module not found')
             return None
         return command_class
