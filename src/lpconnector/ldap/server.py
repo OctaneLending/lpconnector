@@ -1,4 +1,5 @@
 from __future__ import print_function
+import sys
 import ldap
 from .objects import LDAPUser, LDAPGroup, LDAPObjectException
 
