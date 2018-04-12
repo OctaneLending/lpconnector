@@ -1,12 +1,10 @@
 from __future__ import print_function
+import sys
 from time import sleep
 import requests
 from ..ldap.objects import LDAPUser
 from .objects import LastPassUser, LastPassGroup
-
-
-class AuthorizationError(Exception):
-    pass
+from ..base import print_error
 
 
 class LastPassClient(object):
@@ -24,7 +22,7 @@ class LastPassClient(object):
         self.url = url
         self.cid = config.get('api_cid')
         self.user = config.get('api_user')
-        self.key = config.get('api_secret')
+        self.key = config.get('api_provhash')
 
     @staticmethod
     def ldap_to_lastpass_user(user):
@@ -106,17 +104,21 @@ class LastPassClient(object):
             command=LastPassClient.CMD_GET_USER_DATA,
             data_payload=data_payload
         )
-        if response:
+        if 'Users' in response:
             for lp_user in response.get('Users').values():
                 users.append(LastPassUser(**lp_user))
+        else:
+            print('User(s) not found')
         return users
 
     def get_group_data(self):
         response = self.get_data(LastPassClient.CMD_GET_USER_DATA)
         groups = []
-        if response:
+        if 'Groups' in response:
             for group in response.get('Groups').values():
                 groups.append(LastPassGroup(**group))
+        else:
+            print('Group(s) not found')
         return groups
 
     def delete_user(self, user, action=0):
@@ -162,10 +164,17 @@ class LastPassClient(object):
 
     @staticmethod
     def make_request(url, payload):
-        response = requests.post(url, json=payload)
+        try:
+            response = requests.post(url, json=payload)
+        except requests.exceptions.RequestException as error:
+            print_error('FAIL: {0}; {1}'.format(type(error).__name__, str(error)))
+            sys.exit('LastPass API connection failed; exiting')
+
+        # If there is an authorization error, the LastPass API will return a 200 but with
+        # an XML body, so .json() will throw an exception when trying to decode
         try:
             json_response = response.json()
-        except Exception:
-            print("FAIL: Authorization Error; API Connection failed; exiting")
-            raise AuthorizationError(Exception)
+        except ValueError:
+            print_error('FAIL: AuthorizationError; Invalid provhash or cid')
+            sys.exit('LastPass API connection failed; exiting')
         return json_response

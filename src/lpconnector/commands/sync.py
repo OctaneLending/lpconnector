@@ -111,16 +111,16 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
                 new_groups = [x for x in ldap_groups if x not in lp_groups]
                 del_groups = [y for y in lp_groups if y not in ldap_groups]
 
-            if not new_groups:
+            if new_groups:
                 payload_dict['add'] = new_groups
                 update = True
-            if not del_groups:
+            if del_groups:
                 payload_dict['del'] = del_groups
                 update = True
             if update:
                 user_payload.append(payload_dict)
 
-        if not user_payload:
+        if user_payload:
             if self.lp_client.sync_groups(user_payload):
                 print(str(len(user_payload)) + " user(s) successfully synced...")
                 return True

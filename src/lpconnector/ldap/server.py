@@ -2,6 +2,7 @@ from __future__ import print_function
 import sys
 import ldap
 from .objects import LDAPUser, LDAPGroup, LDAPObjectException
+from ..base import print_error
 
 
 class LDAPServer(object):
@@ -22,8 +23,10 @@ class LDAPServer(object):
         try:
             self.ldap_server.protocol_version = ldap.VERSION3   # pylint: disable=no-member
             self.ldap_server.simple_bind_s(bind_dn, bind_pw)
-        except ldap.LDAPError as error:   # pylint: disable=no-member
-            print(error)
+        except ldap.LDAPError as error:  # pylint: disable=no-member
+            print_error('LDAP Error: {0}'.format(
+                error.message['desc'] if 'desc' in error.message else str(error)
+            ))
             sys.exit("LDAP Connection failed; exiting")
         return True
 
@@ -103,8 +106,10 @@ class LDAPServer(object):
                             result_set.append(LDAPUser(**result_data[0][1]))
                         elif ldap_obj_class == LDAPGroup.OBJECT_CLASS:
                             result_set.append(LDAPGroup(**result_data[0][1]))
-        except ldap.LDAPError as error:   # pylint: disable=no-member
-            print(error)
+        except ldap.LDAPError as error:  # pylint: disable=no-member
+            print_error('LDAP Error: {0}'.format(
+                error.message['desc'] if 'desc' in error.message else str(error)
+            ))
             sys.exit("LDAP Connection failed; exiting")
         return result_set
 

@@ -2,6 +2,7 @@ import io
 from glob import glob
 from os.path import basename, dirname, join, splitext
 from setuptools import setup, find_packages
+from src.lpconnector import __version__
 
 
 def read(fname):
@@ -10,7 +11,7 @@ def read(fname):
 
 setup(
     name="lpconnector",
-    version='0.7.1',
+    version=__version__,
     url="https://www.github.com/OctaneLending/lastpass-ldap-syc",
     author="Joshua Marcus-Hixson",
     author_email="josh@octanelending.com",
