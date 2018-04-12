@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name="lpconnector",
-    version='0.7.0',
+    version='0.7.1',
     url="https://www.github.com/OctaneLending/lastpass-ldap-syc",
     author="Joshua Marcus-Hixson",
     author_email="josh@octanelending.com",
