@@ -1,4 +1,4 @@
-.PHONY: clean install test
+.PHONY: clean build install test
 
 clean: clean-build clean-pyc
 
