@@ -67,39 +67,39 @@ Details on command options are as follows:
 ===================== =========================================================================================== ============================================================================================
 Option                Usage                                                                                       Values                                                                                       
 ===================== =========================================================================================== ============================================================================================
---users=UIDs          Only select specific directory users                                                        Comma separated list of directory users uids
---groups=GCNs         Only select specific directory groups                                                       Comma separated list of directory groups common names. Double quote groups names with spaces
+--users=UIDs          Only select specific directory users                                                        Comma separated list of directory users' uids
+--groups=GCNs         Only select specific directory groups                                                       Comma separated list of directory groups' common names. Double quote group names with spaces
 --no-add              Don't add new users on sync                                                                 None
 --no-delete           Don't delete old users on sync                                                              None
 --no-update           Don't update user groups on sync                                                            None
 --throttle=NUM        Throttle provisioning to batches of NUM users                                               Integer
 --password=PWD        Set the default password on new LastPass accounts                                           String. Double quote if password contains spaces
---reset-password=BOOL Whether or not new LastPass                                                                 Boolean or 0/1
+--no-reset-password   Don't reset the default password on first login (requires --password)                       None
 --email=EMAIL         Only return a specific LastPass user                                                        Valid email address
---url=URL             Define a different endpoint for the LastPass API                                            Valid url starting with https://
---disabled=BOOL       Return only disabled or no disabled LastPass users                                          Boolean or 0/1
---admin=BOOL          Return only admins or only non-admin LastPass Users                                         Boolean or 0/1
+--url=URL             Define a different endpoint for the LastPass API                                            Valid url
+--disabled=BOOL       Return only disabled or no disabled LastPass users (omitting returns both)                  Boolean or 0/1
+--admin=BOOL          Return only admins or only non-admin LastPass Users (omitting returns both)                 Boolean or 0/1
 --dry-run             Print payloads to the LastPass API instead of posting them (still retrieves data live data) None
 ===================== =========================================================================================== ============================================================================================
     
 Authors
 -------
 
-* Joshua Marcus-Hixson `(jixson12)<https://www.github.com/jixson12)`_ - *Initial Work*
+* Joshua Marcus-Hixson (`jixson12<https://www.github.com/jixson12>)`_.) - *Initial Work*
 
 License
 -------
 
-    Copyright 2018, Octane Lending, Inc.
+Copyright 2018, Octane Lending, Inc.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-       `http://www.apache.org/licenses/LICENSE-2.0<http://www.apache.org/licenses/LICENSE-2.0>`_
+    S`http://www.apache.org/licenses/LICENSE-2.0<http://www.apache.org/licenses/LICENSE-2.0>`_
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
