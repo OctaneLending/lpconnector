@@ -12,16 +12,16 @@ This client connects to a remote user directory and queries users and groups ove
 Prerequisites
 -------------
 
-This client requires pip and virtualenv with setuptools to build and run.  The client should work on all operating systems and is compatible with all versions of Python except or 3.7 due to the use of the ConfigParser module.  This incompatibility will be addressed in a future release.
+This client requires ``pip`` and ``virtualenv`` with ``setuptools`` to build and run.  The client should work on all operating systems and is compatible with all versions of Python except or 3.7 due to the use of the ``ConfigParser`` module.  This incompatibility will be addressed in a future release.
 
 Setup
 -----
 
-Clone this repo to your workspac.  Before installing the client run::
+Clone this repo to your workspace.  Before installing the client run::
 
     $ mv src/lpconnector/config/config.ini.template src/lpconnector/config/config.ini
 
-And then update the ``config.ini`` file with the proper paramaters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key.
+And then update the ``config.ini`` file with the proper parameters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key.
 Then setup and activate your virtual environment and install by running::
 
     $ virtualenv venv
@@ -35,7 +35,7 @@ The client can be run like so::
 Running Tests
 -------------
 
-Setup your virtualenv the same way as above and run::
+Setup your virtual environment the same way as above and run::
 
     $ python setup.py test
 
@@ -85,7 +85,7 @@ Option                Usage                                                     
 Authors
 -------
 
-* Joshua Marcus-Hixson (jixson12_.) - *Initial Work*
+* Joshua Marcus-Hixson (jixson12_) - *Initial Work*
 
 .. _jixson12: https://www.github.com/jixson12
 
