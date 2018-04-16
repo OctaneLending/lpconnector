@@ -9,6 +9,8 @@ Purpose
 LastPass currently only offers and AD connector client that works with a local AD server.  This client is intended to connect to a remote user directory and queries users and groups over LDAP to sync an organization's users and groups in LastPass Enterprise.  The included LastPass API client contains *almost* full coverage of the LastPass Enterprise API as documented `here
 <https://lastpass.com/enterprise_apidoc.php>`_. This client is designed to be run manually to provision new users and force updates to existing users through the ``provision`` command and to be run in an automated fashion using the ``sync`` command to keep LastPass Enterprise users up-to-date.
 
+PLEASE NOTE: The client is not fully unittested or documented, all of that will be coming soon :)
+
 Prerequisites
 -------------
 
