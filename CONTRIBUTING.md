@@ -30,4 +30,4 @@ By contributing to this project you agree that your contributions will be licens
 
 # Maintainers
 
-* Joshua Marcus-Hixson a.k.a. [jixson12](https://www.github.com/jixson12)
+* Josh Marcus-Hixson a.k.a. [jixson12](https://www.github.com/jixson12)
