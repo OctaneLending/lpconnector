@@ -9,12 +9,12 @@ Responsibilities
 * Ensure that code that goes into core follows PEP8 standards
 * Create issues for any major changes and enhancements that you wish to make. Discuss things transparently and get community feedback.
 * Don't add any classes to the codebase unless absolutely needed. Err on the side of using functions.
-* Keep feature versions as small as possible, preferably one new feature per version.
+* Keep features as limited in scope as possible.
 * Be welcoming to newcomers and encourage diverse new contributors from all backgrounds. See the [Python Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
 
 # How to Report a Bug
 
-Open an PR on the project and label it appropriately.  Please understand that some things that you might consider bugs could be intended.  Please provide sufficient material to justiy your belief that this bug exists (stack traces, examples of race conditions or abherrent behavior, etc.).  When reporting a bug, just try to make life as easy as possible for the maintainers.  Allow up to two weeks for a maintainer to review your bug submission.
+Open an PR on the project and label it appropriately.  Please understand that some things that you might consider bugs could be intended.  Please provide sufficient material to justiy your belief that this bug exists (stack traces, examples of race conditions or abherrent behavior, etc.).  When reporting a bug, try to make life as easy as possible for the maintainers.  Allow up to two weeks for a maintainer to review your bug submission.
 
 # How to Suggest a Feature or Enhancement
 
@@ -30,4 +30,4 @@ By contributing to this project you agree that your contributions will be licens
 
 # Maintainers
 
-* Joshua Marcus-Hixson a.k.a. [jixson12](https://www.github.com/jixson12); aslo reachable at josh@octanelending.com
+* Joshua Marcus-Hixson a.k.a. [jixson12](https://www.github.com/jixson12)
