@@ -22,7 +22,7 @@ Any features or enhancement must be opened as issues on the project and labelled
 
 # Code Review Process
 
-All code must be reviewed and approved by one of the listed maintainers before any PR can be merged into the project.  Please ensure any contributions are fully documented and unittested.  Undocumented or untested contributions will be rejected.  Maintainers will also be responsibile for decideding the versioning of any contribution you make.  If suggestions are made by maintainers and not responded to within two weeks, your PR may be closed.  Maintainers will also handle any merging and publishing of any new releases.
+All code must be reviewed and approved by one of the listed maintainers before any PR can be merged into the project.  Please ensure any contributions are fully documented and unittested.  Undocumented or untested contributions will be rejected.  Maintainers will also be responsibile for decideding the versioning of any contribution you make.  If suggestions are made by maintainers and not responded to within two weeks, your PR may be closed.  Maintainers will also handle any merging and publishing of any new releases.  Branches will be deleted once merged.
 
 # License
 
