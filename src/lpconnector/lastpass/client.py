@@ -91,13 +91,13 @@ class LastPassClient(object):
 
     def get_user_data(self, user=None, disabled=None, admin=None):
         data_payload = {}
-        if user is not None or disabled or admin:
-            if user is not None:
-                data_payload['username'] = user
-            if disabled:
-                data_payload['disabled'] = 1
-            if admin:
-                data_payload['admin'] = 1
+
+        if user is not None:
+            data_payload['username'] = user
+        if disabled is not None:
+            data_payload['disabled'] = int(disabled)
+        if admin is not None:
+            data_payload['admin'] = int(admin)
 
         users = []
         response = self.get_data(
@@ -135,6 +135,8 @@ class LastPassClient(object):
 
     def get_data(self, command, data_payload=None):
         payload = self.build_payload(command, data_payload)
+        if self.dry_run:
+            print(payload)
         return self.make_request(self.url, payload)
 
     def post_data(self, command, data_payload=None):
