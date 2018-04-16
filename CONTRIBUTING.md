@@ -20,7 +20,7 @@ We welcome Issues and PRs on this project.  If the contribution you are proposin
 
 Open an Issue on the project and label it appropriately.  Please understand that some things that you might consider bugs could be intended.  Please provide sufficient material to justiy your belief that this bug exists (stack traces, examples of race conditions or abherrent behavior, etc.).  When reporting a bug, try to make life as easy as possible for the maintainers.  Once the bug is confirmed the reporter is responsible for opening up a PR to propose a fix.  Allow up to two weeks for a maintainer to review your bug submission.
 
-PLEASE NOTE: If you are reporting a security vulnerability DO NOT open an Issue, email security@octanelending.com immediately
+**PLEASE NOTE:** If you are reporting a security vulnerability **DO NOT** open an Issue, email security@octanelending.com immediately
 
 # How to Suggest a Feature or Enhancement
 
