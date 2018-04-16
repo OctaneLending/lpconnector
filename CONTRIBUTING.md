@@ -1,17 +1,33 @@
 # Introduction
 
+Thank you for your interest in contributing to this project!  Before contributing please read these guidelines, they'll outline the types of contributions we're looking for and how you should be contributing to this project.  As this tool is designed to be used in enterprise environments, we will closely review and thoroughly test contributions to make sure they don't disrupt the operations of any organization leveraging this tool for their operations.  Please understand that this, like all projects, is a work in progress. 
+
 # Ground Rules
 
-# Your First Contribution
-
-# Getting Started
+Responsibilities
+* Ensure cross-platform compatibility for every change that's accepted. Windows, Mac, Debian & Ubuntu Linux.
+* Ensure that code that goes into core follows PEP8 standards
+* Create issues for any major changes and enhancements that you wish to make. Discuss things transparently and get community feedback.
+* Don't add any classes to the codebase unless absolutely needed. Err on the side of using functions.
+* Keep feature versions as small as possible, preferably one new feature per version.
+* Be welcoming to newcomers and encourage diverse new contributors from all backgrounds. See the [Python Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
 
 # How to Report a Bug
 
+Open an PR on the project and label it appropriately.  Please understand that some things that you might consider bugs could be intended.  Please provide sufficient material to justiy your belief that this bug exists (stack traces, examples of race conditions or abherrent behavior, etc.).  When reporting a bug, just try to make life as easy as possible for the maintainers.  Allow up to two weeks for a maintainer to review your bug submission.
+
 # How to Suggest a Feature or Enhancement
+
+Any features or enhancement must be opened as issues on the project and labelled appropriately for full and transparent discussion between maintainers and contributors.  It is up to the maintainers discretion as to what features are approved.  The maintainers have the responsibility to make sure any contributions to this project are inline with the intended purpose.  Maintainers will also close issues on a monthly basis if there is no activity.
 
 # Code Review Process
 
-# Community
+All code must be reviewed and approved by one of the listed maintainers before any PR can be merged into the project.  Please ensure any contributions are fully documented and unittested.  Undocumented or untested contributions will be rejected.  Maintainers will also be responsibile for decideding the versioning of any contribution you make.  If suggestions are made by maintainers and not responded to within two weeks, your PR may be closed.  Maintainers will also handle any merging and publishing of any new releases.
 
-# Code, Commit Message, and Labeling Conventions
+# License
+
+By contributing to this project you agree that your contributions will be licensed under its Apache 2.0 license.
+
+# Maintainers
+
+* Joshua Marcus-Hixson a.k.a. [jixson12](https://www.github.com/jixson12); aslo reachable at josh@octanelending.com
