@@ -85,8 +85,9 @@ Option                Usage                                                     
 Authors
 -------
 
-* Joshua Marcus-Hixson (`jixson12
-<https://www.github.com/jixson12>`_.) - *Initial Work*
+* Joshua Marcus-Hixson (jixson12_.) - *Initial Work*
+
+.. _jixson12: https://www.github.com/jixson12
 
 License
 -------
