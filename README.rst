@@ -70,23 +70,23 @@ Options
 
 Details on command options are as follows:
 
-===================== =========================================================================================== ============================================================================================
+=================== =========================================================================================== ============================================================================================
 Option                Usage                                                                                       Values                                                                                       
-===================== =========================================================================================== ============================================================================================
---users=UIDs          Only select specific directory users                                                        Comma separated list of directory users' uids
---groups=GCNs         Only select specific directory groups                                                       Comma separated list of directory groups' common names. Double quote group names with spaces
---no-add              Don't add new users on sync                                                                 None
---no-delete           Don't delete old users on sync                                                              None
---no-update           Don't update user groups on sync                                                            None
---throttle=NUM        Throttle provisioning to batches of NUM users                                               Integer
---password=PWD        Set the default password on new LastPass accounts                                           String. Double quote if password contains spaces
---no-reset-password   Don't reset the default password on first login (requires --password)                       None
---email=EMAIL         Only return a specific LastPass user                                                        Valid email address
---url=URL             Define a different endpoint for the LastPass API                                            Valid url
---disabled=BOOL       Return only disabled or no disabled LastPass users (omitting returns both)                  Boolean or 0/1
---admin=BOOL          Return only admins or only non-admin LastPass Users (omitting returns both)                 Boolean or 0/1
---dry-run             Print payloads to the LastPass API instead of posting them (still retrieves data live data) None
-===================== =========================================================================================== ============================================================================================
+=================== =========================================================================================== ============================================================================================
+users=UIDs          Only select specific directory users                                                        Comma separated list of directory users' uids
+groups=GCNs         Only select specific directory groups                                                       Comma separated list of directory groups' common names. Double quote group names with spaces
+no-add              Don't add new users on sync                                                                 None
+no-delete           Don't delete old users on sync                                                              None
+no-update           Don't update user groups on sync                                                            None
+throttle=NUM        Throttle provisioning to batches of NUM users                                               Integer
+password=PWD        Set the default password on new LastPass accounts                                           String. Double quote if password contains spaces
+no-reset-password   Don't reset the default password on first login (requires --password)                       None
+email=EMAIL         Only return a specific LastPass user                                                        Valid email address
+url=URL             Define a different endpoint for the LastPass API                                            Valid url
+disabled=BOOL       Return only disabled or no disabled LastPass users (omitting returns both)                  Boolean or 0/1
+admin=BOOL          Return only admins or only non-admin LastPass Users (omitting returns both)                 Boolean or 0/1
+dry-run             Print payloads to the LastPass API instead of posting them (still retrieves data live data) None
+=================== =========================================================================================== ============================================================================================
     
 Authors
 -------
