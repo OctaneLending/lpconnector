@@ -25,7 +25,7 @@ Setup
 
 Clone this repo to your workspace.  Before installing the client run::
 
-    $ mv src/lpconnector/config/config.ini.template src/lpconnector/config/config.ini
+    $ mv src/lpconnector/base/config/config.ini.template src/lpconnector/base/config/config.ini
 
 And then update the ``config.ini`` file with the proper parameters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key.
 Then setup and activate your virtual environment and install by running::
