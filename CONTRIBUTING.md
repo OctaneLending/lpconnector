@@ -16,6 +16,10 @@ Responsibilities
 
 We welcome Issues and PRs on this project.  If the contribution you are proposing is trivial, feel free to simply open a PR, otherwise refer to the guidelines below.  We currently do not require any CLA to begin contributing, but if you make a significant contribution be aware that we might reach out to you in the future if we ever try to relicense this project.  All contributions must be fully documented and unittested.  Contributers who introduce significant features or ench
 
+# Getting Started
+
+We maintain a list of things we would like to add to this project or aspects of it we would like to fix or improve.  If you just want to get involved and not sure where to start, take a look at [TODO.md](https://github.com/OctaneLending/lpconnector/issues/7) for ideas.  Picking one of those up would be amazing and much appreciated!
+
 # How to Report a Bug
 
 Open an Issue on the project and label it appropriately.  Please understand that some things that you might consider bugs could be intended.  Please provide sufficient material to justiy your belief that this bug exists (stack traces, examples of race conditions or abherrent behavior, etc.).  When reporting a bug, try to make life as easy as possible for the maintainers.  Once the bug is confirmed the reporter is responsible for opening up a PR to propose a fix.  Allow up to two weeks for a maintainer to review your bug submission.
