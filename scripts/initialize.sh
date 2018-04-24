@@ -14,7 +14,14 @@ else
 	print_msg "Setting up virtual environment..."
 	activate
 	print_cfm "Virtual environment activated."
-	print_msg "Building and installing lpconnector client..."
-	setup install
-	print_cfm "lpconnector client ready to use."
+	print_msg "Building and running tests for lpconnector client..."
+	setup test
+	read -p "lpconnector client tests complete.  Continue? [y/n] " -n 1 -r
+    if [[ REPLY =~ ^[Nn]$ ]]; then
+        exit 1
+    fi
+    echo
+	print_msg "Installing lpconnector client..."
+	setup install --no-clean
+	print_cfm "lpconnector client ready to use!"
 fi

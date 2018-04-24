@@ -25,7 +25,7 @@ destroy() {
     print_msg "Destroying entire environment..."
     clean
     clean_venv
-    print_cfm "Done."
+    print_cfm "Destruction complete."
 }
 
 clean() {
@@ -73,9 +73,28 @@ activate() {
     fi
 }
 
-config() {
+config() (
     config="src/lpconnector/base/config/$CONFIG_FILE"
     template="$config.template"
+
+    write_file() {
+        while IFS= read -r -u 3 line; do
+
+            if echo $line | grep -Eq "\[[A-Z]+\]"; then
+                section=$(echo $line | sed "s/[^A-Z]//g")
+                echo "Setting configurations for $section... (Press any key to continue) "
+                read -n 1 -s
+                echo $line >> $1
+            elif [[ -z $line ]]; then
+                echo >> $1
+            else
+                read -sp "$line" input
+                echo
+                echo $line$input >> $1
+            fi
+
+        done 3< $2
+    }
 
     if [ ! -f $config ]; then
         print_err "No configuration file present, creating file..."
@@ -84,33 +103,15 @@ config() {
     else
         read -p "Config file present, do you want to overwrite? [y/n] " -n 1 -r
         echo
-        if [[ REPLY =~ ^[Yy]$ ]]; then
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
             print_msg "Overwriting config file..."
+            > $config
             write_file $config $template
         else
             print_msg "Using config file at $config..."
         fi
     fi
-}
-
-write_file() {
-    while IFS= read -r -u 3 line; do
-
-        if echo $line | grep -Eq "\[[A-Z]+\]"; then
-            section=$(echo $line | sed "s/[^A-Z]//g")
-            echo "Setting configurations for $section... (Press any key to continue) "
-            read -n 1 -s
-            echo $line >> $1
-        elif [[ -z $line ]]; then
-            echo >> $1
-        else
-            read -sp "$line" input
-            echo
-            echo $line$input >> $1
-        fi
-
-    done 3< $2
-}
+)
 
 check_requirements() {
     if ! which pip > /dev/null; then
@@ -130,24 +131,39 @@ check_requirements() {
 }
 
 setup() {
-    clean
+    if ! [[ $2 == '--no-clean' ]]; then
+        clean
+    fi
     print_msg "Running $1 on setup.py"
-    python setup.py $1 &> /dev/null
-    print_cfm "Setup complete."
+    python setup.py $1 2> /dev/null
 }
 
 build() {
     print_msg "Starting build..."
-    setup build
-    print_cfm "Build complete."
+    if setup build; then
+        print_cfm "Build complete."
+    else
+        print_err "Build failed; exiting."
+        exit 1
+    fi
 }
 
 update() {
     print_msg "Updating lpconnector client..."
-    setup install
-    print_cfm "lpconnector client updated and ready to use." green
+    if setup install; then
+        print_cfm "lpconnector client updated and ready to use."
+    else
+        print_err "lpconnector client update failed; exiting."
+        exit 1
+    fi
 }
 
 test() {
-    setup test
+    print_msg "Running tests..."
+    if setup test; then
+        print_cfm "Tests Passed."
+    else
+        print_err "Tests Failed; exiting."
+        exit 1
+    fi
 }
