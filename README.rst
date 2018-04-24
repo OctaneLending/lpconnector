@@ -7,11 +7,11 @@ Purpose
 -------
 
 `LastPass
-<https://www.lastpass.com>`_. currently only offers and AD connector client that works with a local AD server.  This client is intended to connect to a remote user directory and queries users and groups over LDAP to sync an organization's users and groups in LastPass Enterprise.  The included LastPass API client contains *almost* full coverage of the LastPass Enterprise API as documented `here
+<https://www.lastpass.com>`_ currently only offers and AD connector client that works with a local AD server.  This client is intended to connect to a remote user directory and queries users and groups over LDAP to sync an organization's users and groups in LastPass Enterprise.  The included LastPass API client contains *almost* full coverage of the LastPass Enterprise API as documented `here
 <https://lastpass.com/enterprise_apidoc.php>`_. This client is designed to be run manually to provision new users and force updates to existing users through the ``provision`` command and to be run in an automated fashion using the ``sync`` command to keep LastPass Enterprise users up-to-date.
 
 Shoutout to `JumpCloud
-<https://www.jumpcloud.com>`_. for being the motivation for the creation of this client.
+<https://www.jumpcloud.com>`_ for being the motivation for the creation of this client.
 
 PLEASE NOTE: The client is not fully unittested or documented, all of that will be coming soon :)
 
@@ -71,23 +71,23 @@ Options
 
 Details on command options are as follows:
 
-===================== =========================================================================================== ============================================================================================
+=================== =========================================================================================== ============================================================================================
 Option                Usage                                                                                       Values                                                                                       
-===================== =========================================================================================== ============================================================================================
---users=UIDs          Only select specific directory users                                                        Comma separated list of directory users' uids
---groups=GCNs         Only select specific directory groups                                                       Comma separated list of directory groups' common names. Double quote group names with spaces
---no-add              Don't add new users on sync                                                                 None
---no-delete           Don't delete old users on sync                                                              None
---no-update           Don't update user groups on sync                                                            None
---throttle=NUM        Throttle provisioning to batches of NUM users                                               Integer
---password=PWD        Set the default password on new LastPass accounts                                           String. Double quote if password contains spaces
---no-reset-password   Don't reset the default password on first login (requires --password)                       None
---email=EMAIL         Only return a specific LastPass user                                                        Valid email address
---url=URL             Define a different endpoint for the LastPass API                                            Valid url
---disabled=BOOL       Return only disabled or no disabled LastPass users (omitting returns both)                  Boolean or 0/1
---admin=BOOL          Return only admins or only non-admin LastPass Users (omitting returns both)                 Boolean or 0/1
---dry-run             Print payloads to the LastPass API instead of posting them (still retrieves data live data) None
-===================== =========================================================================================== ============================================================================================
+=================== =========================================================================================== ============================================================================================
+users=UIDs          Only select specific directory users                                                        Comma separated list of directory users' uids
+groups=GCNs         Only select specific directory groups                                                       Comma separated list of directory groups' common names. Double quote group names with spaces
+no-add              Don't add new users on sync                                                                 None
+no-delete           Don't delete old users on sync                                                              None
+no-update           Don't update user groups on sync                                                            None
+throttle=NUM        Throttle provisioning to batches of NUM users                                               Integer
+password=PWD        Set the default password on new LastPass accounts                                           String. Double quote if password contains spaces
+no-reset-password   Don't reset the default password on first login (requires --password)                       None
+email=EMAIL         Only return a specific LastPass user                                                        Valid email address
+url=URL             Define a different endpoint for the LastPass API                                            Valid url
+disabled=BOOL       Return only disabled or no disabled LastPass users (omitting returns both)                  Boolean or 0/1
+admin=BOOL          Return only admins or only non-admin LastPass Users (omitting returns both)                 Boolean or 0/1
+dry-run             Print payloads to the LastPass API instead of posting them (still retrieves data live data) None
+=================== =========================================================================================== ============================================================================================
     
 Authors
 -------
