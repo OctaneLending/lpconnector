@@ -23,27 +23,28 @@ This client requires ``pip`` and ``virtualenv`` with ``setuptools`` to build and
 Setup
 -----
 
-Clone this repo to your workspace.  Before installing the client run::
+Clone this repo to your workspace and simply run the following command to run the initialization script::
 
-    $ mv src/lpconnector/base/config/config.ini.template src/lpconnector/base/config/config.ini
+    $ . scripts/initialize.sh
 
-And then update the ``config.ini`` file with the proper parameters to connect to your user directory and LastPass Enterprise account. Refer to the LastPass Enterprise API documentation linked above to find your account's CID and API key.
-Then setup and activate your virtual environment and install by running::
+The script will initialize your environment and prompt you to set your configuration parameters for LDAP and LastPass Enterprise.  Once finished, you will be in a virtual environment, ready to use the client.
 
-    $ virtualenv venv
-    $ source venv/bin/activate
-    $ python setup.py install
-
+Usage
+-----
 The client can be run like so::
 
     $ lpconnector <command> [options]
 
+See the table below for supported commands and their options.
+
+If you used the initialization script to setup your environment, you can simply run ``update`` after making any changes to the client to rebuild and install it.
+
 Running Tests
 -------------
 
-Setup your virtual environment the same way as above and run::
+If you used the initialization script to setup your environments, all you need to do top run tests is::
 
-    $ python setup.py test
+    $ test
 
 Tests use the ``pytest`` module and provide code coverage information via the ``pytest-cov`` module
 
