@@ -15,6 +15,7 @@ class LastPassUsers(BaseCommand):   # pylint: disable=too-few-public-methods
         --email=EMAIL           Get a single user by their email address
         --disabled=BOOL         Get only disabled users
         --admin=BOOL            Get only admin users
+        --raw                   Prints all LastPass attributes
 
     """
 
@@ -27,5 +28,8 @@ class LastPassUsers(BaseCommand):   # pylint: disable=too-few-public-methods
             admin=admin
         )
         for user in users:
-            print(user.as_dict())
+            if self.args.get('--raw'):
+                print(user.__dict__)
+            else:
+                print(user.as_dict())
         return True

@@ -1,3 +1,4 @@
+import re
 from docopt import docopt
 from ..base.config import BaseConfig
 from ..ldap.server import LDAPServer
@@ -23,6 +24,10 @@ class BaseCommand(object):
         },
         'provision': {
             'class': 'Provision',
+            'argv': True,
+        },
+        'deprovision': {
+            'class': 'Deprovision',
             'argv': True,
         },
         'ldapusers': {
@@ -69,3 +74,8 @@ class BaseCommand(object):
 
     def execute(self):
         raise NotImplementedError
+
+    @staticmethod
+    def confirmation_prompt(message):
+        response = raw_input(message + ' Continue? [y/n]: ')
+        return True if re.match(r"^y(?=e?$|e(?![^s]))", response, re.IGNORECASE) else False
