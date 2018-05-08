@@ -1,4 +1,5 @@
 from __future__ import print_function
+from time import sleep
 from .basecommand import BaseCommand
 
 
@@ -6,13 +7,15 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
 
     """
     Usage:
-        sync [--users=UIDs | --groups=GCNs] [--url=URL] [--no-add] [--no-delete] [--no-update] [--dry-run]
+        sync [--users=UIDs | --groups=GCNs] [--url=URL] [--throttle=NUM] [--no-add] [--no-delete] [--no-update]
+            [--dry-run]
 
 
         -n --dry-run            Display API requests instead of sending them
         -u UIDS --users=UIDs    Comma separated list of user uids to provision/sync
         -g GCNs --groups=GCNs   Comma separated list of group common names to provision/sync  # quote names with spaces
         --url=URL               Specify API endpoint URL
+        -t NUM --throttle=NUM   Throttle loading by specified value [default: 0]
         --no-add                Don't add new users on sync
         --no-delete             Don't delete missing users on sync
         --no-update             Don't update a user's groups on sync
@@ -68,7 +71,8 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
         new_users = self.get_new_users()
         if new_users:
             print(str(len(new_users)) + " user(s) to add...")
-            if self.lp_client.batch_add(new_users):
+            throttle = int(self.args.get('--throttle'))
+            if self.lp_client.batch_add(new_users, throttle):
                 print(str(len(new_users)) + " user(s) successfully added...")
             else:
                 print("Failed to add users")
@@ -81,9 +85,15 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
         del_users = self.get_del_users()
         if del_users:
             print(str(len(del_users)) + " user(s) to delete...")
+            throttle = int(self.args.get('--throttle'))
+            count = 0
             for user in del_users:
+                if throttle and count == throttle:
+                    sleep(1)
+                    count = 0
                 if self.lp_client.delete_user(user.get_email()):
                     print(user.get_email() + " successfully deactivated...")
+                    count += 1
                 else:
                     print("Failed to delete " + user.get_email())
                     return False

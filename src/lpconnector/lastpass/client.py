@@ -67,11 +67,15 @@ class LastPassClient(object):
                     count += 1
 
                 if count == throttle:
-                    print('Provisioning ' + str(throttle) + ' users...')
+                    print('Provisioning ' + str(count) + ' users...')
                     self.post_data(LastPassClient.CMD_BATCH_ADD, user_data)
                     count = 0
                     user_data = []
-                    sleep(throttle)
+                    sleep(1)
+            # Any users left over
+            if count > 0:
+                print('Provisioning ' + str(count) + ' users...')
+                self.post_data(LastPassClient.CMD_BATCH_ADD, user_data)
 
         else:
             for user in users:

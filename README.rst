@@ -56,8 +56,8 @@ Client commands are as follows:
 ============== ============================================================== =====================================================================
 Command Name   Purpose                                                        Options
 ============== ============================================================== =====================================================================
-sync           Sync directory data with LastPass users, intended to scheduled --users or --groups, --no-add, --no-delete, --no-update, --dry-run
-provision      Add new users from your directory to LastPass                  --users or --groups, --throttle --password --reset-password --dry-run
+sync           Sync directory data with LastPass users, intended to scheduled --users or --groups, --throttle, --no-add, --no-delete, --no-update, --dry-run
+provision      Add new users from your directory to LastPass                  --users or --groups, --throttle, --password, --reset-password, --dry-run
 ldapusers      Return all users in your directory                             --users or --groups
 ldapgroups     Return all groups in your directory                            --groups
 lastpassusers  Return all users in LastPass                                   --email, --url, --disabled, --admin, --dry-run
