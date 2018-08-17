@@ -103,6 +103,8 @@ config() (
     else
         read -p "Config file present, do you want to overwrite? [y/n] " -n 1 -r
         echo
+        backup="$config.bak"
+        cp $config $backup
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             print_msg "Overwriting config file..."
             > $config
