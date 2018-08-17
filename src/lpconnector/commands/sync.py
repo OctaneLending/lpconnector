@@ -33,7 +33,7 @@ class Sync(BaseCommand):    # pylint: disable=too-few-public-methods
             print("Syncing ALL users to LastPass...")
             self.ldap_users = self.ldap_server.get_all_users()
             print("Retrieving " + str(len(self.ldap_users)) + " LDAP Users...")
-            self.lastpass_users = self.lp_client.get_user_data()
+            self.lastpass_users = self.lp_client.get_user_data(disabled=0)
         else:
             if self.args.get('--users') is not None:
                 users = self.args.get('--users').split(',')
