@@ -21,7 +21,7 @@ setup(
     tests_require=['pytest', 'pytest-cov', 'pytest-sugar', 'pytest-timeout', 'mock'],
     install_requires=[
         'python-ldap==3.0.0',
-        'requests==2.18.4',
+        'requests==2.20.0',
         'docopt==0.6.2',
     ],
     packages=find_packages('src'),
