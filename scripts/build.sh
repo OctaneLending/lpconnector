@@ -73,8 +73,16 @@ activate() {
     fi
 }
 
-config() (
-    config="src/lpconnector/base/config/$CONFIG_FILE"
+config="src/lpconnector/base/config/$CONFIG_FILE"
+
+check_config() {
+    if [[ ! -f $config ]]; then
+        print_err "No configuration file present, exiting."
+        exit 1
+    fi
+}
+
+config() {
     template="$config.template"
 
     write_file() {
@@ -96,7 +104,7 @@ config() (
         done 3< $2
     }
 
-    if [ ! -f $config ]; then
+    if [[ ! -f $config ]]; then
         print_err "No configuration file present, creating file..."
         touch $config
         write_file $config $template
@@ -113,7 +121,7 @@ config() (
             print_msg "Using config file at $config..."
         fi
     fi
-)
+}
 
 check_requirements() {
     if ! which pip > /dev/null; then
