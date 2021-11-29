@@ -20,7 +20,7 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov', 'pytest-sugar', 'pytest-timeout', 'mock'],
     install_requires=[
-        'python-ldap==3.0.0',
+        'python-ldap==3.4.0',
         'requests==2.20.0',
         'docopt==0.6.2',
     ],
