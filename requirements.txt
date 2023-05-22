@@ -6,5 +6,5 @@ lpconnector==0.9.0
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
 python-ldap==3.0.0
-requests==2.20.0
+requests==2.31.0
 urllib3==1.23
